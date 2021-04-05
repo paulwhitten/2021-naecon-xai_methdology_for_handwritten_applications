@@ -1,0 +1,14 @@
+@startuml
+
+(*) -> "Discover\nExplanable\nProperties" as d
+--> [properties] "Define and\nimplement data\ntransformations"
+--> [data\ntransforms] "Transform\n training data"
+--> [transformed\ntraining data] "Train\nExplainable NNs"
+--> [trained\nexplainable NNs] "Build Confidence\nKnowledgebase"
+--> "Construct\nClassification\nSceme"
+if "Test\nClassification\nResults" then
+ --> [Results\nSufficient] (*)
+else 
+ --> [Results\nInsufficient] d
+
+@enduml

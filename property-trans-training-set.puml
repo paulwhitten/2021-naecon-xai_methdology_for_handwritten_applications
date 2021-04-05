@@ -1,0 +1,82 @@
+@startuml
+
+skinparam maxactorsize 0
+
+''skinparam rectangle {
+''    BackgroundColor white
+''    BorderColor white
+''    shadowing false
+''}
+
+usecase "Training\nImage<FONT POINT-SIZE='10'><SUB>i</SUB></FONT>" as input
+
+agent "Property<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>" as XAI_1
+agent "Property<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>" as XAI_11
+agent "Property<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>" as XAI_2
+agent "Property<FONT POINT-SIZE='10'><SUB>3</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>" as XAI_3
+agent "Property<FONT POINT-SIZE='10'><SUB>n</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>m</SUB></FONT>" as XAI_N
+
+input --> XAI_1
+input --> XAI_11
+input --> XAI_2
+input --> XAI_3
+input --> XAI_N
+
+'rectangle "<<v1<FONT POINT-SIZE='10'><SUB>i</SUB></FONT>>, <v2<FONT POINT-SIZE='10'><SUB>i</SUB></FONT>>, <v3<FONT POINT-SIZE='10'><SUB>i</SUB></FONT>>, ..., <vn<FONT POINT-SIZE='10'><SUB>i</SUB></FONT>>>" as pV
+
+rectangle "Property<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nTraining Set" as bucket1 {
+	usecase "Property<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nImage<FONT POINT-SIZE='10'><SUB>i</SUB></FONT>" as img11i
+	usecase "Property<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nImage<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>" as img112
+	usecase "Property<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nImage<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>" as img111
+}
+
+XAI_1 --> img11i
+img11i .down. img112
+img112 -[hidden]down- img111
+
+rectangle "Property<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>\nTraining Set" as bucket11 {
+	usecase "Property<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>\nImage<FONT POINT-SIZE='10'><SUB>i</SUB></FONT>" as img12i
+	usecase "Property<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>\nImage<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>" as img122
+	usecase "Property<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>\nImage<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>" as img121
+}
+
+XAI_11 --> img12i
+img12i .down. img122
+img122 -[hidden]down- img121
+
+rectangle "Property<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nTraining Set" as bucket2 {
+	usecase "Property<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nImage<FONT POINT-SIZE='10'><SUB>i</SUB></FONT>" as img21i
+	usecase "Property<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nImage<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>" as img212
+	usecase "Property<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nImage<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>" as img211
+}
+
+XAI_2 --> img21i
+img21i .down. img212
+img212 -[hidden]down- img211
+
+rectangle "Property<FONT POINT-SIZE='10'><SUB>3</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nTraining Set" as bucket3 {
+	usecase "Property<FONT POINT-SIZE='10'><SUB>3</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nImage<FONT POINT-SIZE='10'><SUB>i</SUB></FONT>" as img31i
+	usecase "Property<FONT POINT-SIZE='10'><SUB>3</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nImage<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>" as img312
+	usecase "Property<FONT POINT-SIZE='10'><SUB>3</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nImage<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>" as img311
+}
+
+XAI_3 --> img31i
+img31i .down. img312
+img312 -[hidden]down- img311
+
+rectangle "Property<FONT POINT-SIZE='10'><SUB>n</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>m</SUB></FONT>\nTraining Set" as bucketn {
+	usecase "Property<FONT POINT-SIZE='10'><SUB>n</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>m</SUB></FONT>\nImage<FONT POINT-SIZE='10'><SUB>i</SUB></FONT>" as imgnmi
+	usecase "Property<FONT POINT-SIZE='10'><SUB>n</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>m</SUB></FONT>\nImage<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>" as imgnm2
+	usecase "Property<FONT POINT-SIZE='10'><SUB>n</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>m</SUB></FONT>\nImage<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>" as imgnm1
+}
+
+XAI_N --> imgnmi
+imgnmi .down. imgnm2
+imgnm2 -[hidden]down- imgnm1
+
+XAI_1 .[hidden]right. XAI_11
+XAI_11 .[hidden]right. XAI_2
+XAI_2 .[hidden]right. XAI_3
+XAI_3 .right. XAI_N
+
+@enduml
