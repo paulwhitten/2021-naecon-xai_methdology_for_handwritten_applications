@@ -10,11 +10,11 @@ skinparam rectangle {
 
 usecase "Input\nImage" as input
 
-agent "Property<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>" as TRANS_1
-agent "Property<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>" as TRANS_11
-agent "Property<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>" as TRANS_2
-agent "Property<FONT POINT-SIZE='10'><SUB>3</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>" as TRANS_3
-agent "Property<FONT POINT-SIZE='10'><SUB>n</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>m</SUB></FONT>" as TRANS_N
+agent "Prop<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>Trans<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>" as TRANS_1
+agent "Prop<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>Trans<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>" as TRANS_11
+agent "Prop<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>Trans<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>" as TRANS_2
+agent "Prop<FONT POINT-SIZE='10'><SUB>3</SUB></FONT>Trans<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>" as TRANS_3
+agent "Prop<FONT POINT-SIZE='10'><SUB>n</SUB></FONT>Trans<FONT POINT-SIZE='10'><SUB>m</SUB></FONT>" as TRANS_N
 
 input --> TRANS_1
 input --> TRANS_11
@@ -22,37 +22,45 @@ input --> TRANS_2
 input --> TRANS_3
 input --> TRANS_N
 
-agent "Property<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nNeural Net" as XAI_1
-agent "Property<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>\nNeural Net" as XAI_11
-agent "Property<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nNeural Net" as XAI_2
-agent "Property<FONT POINT-SIZE='10'><SUB>3</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nNeural Net" as XAI_3
-agent "Property<FONT POINT-SIZE='10'><SUB>n</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>m</SUB></FONT>\nNeural Net" as XAI_N
+agent "Prop<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>Trans<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nNNA" as XAI_1
+agent "Prop<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>Trans<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>\nNNA" as XAI_11
+agent "Prop<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>Trans<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nNNA" as XAI_2
+agent "Prop<FONT POINT-SIZE='10'><SUB>3</SUB></FONT>Trans<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nNNA" as XAI_3
+agent "Prop<FONT POINT-SIZE='10'><SUB>n</SUB></FONT>Trans<FONT POINT-SIZE='10'><SUB>m</SUB></FONT>\nNNA" as XAI_N
 
-TRANS_1 --> XAI_1 : "Transformed\nImage"
-TRANS_11 --> XAI_11 : "Transformed\nImage"
-TRANS_2 --> XAI_2 : "Transformed\nImage"
-TRANS_3 --> XAI_3 : "Transformed\nImage"
-TRANS_N --> XAI_N : "Transformed\nImage"
+TRANS_1 --> XAI_1
+TRANS_11 --> XAI_11
+TRANS_2 --> XAI_2
+TRANS_3 --> XAI_3
+TRANS_N --> XAI_N
 
 XAI_1 .[hidden]right. XAI_11
 XAI_11 .[hidden]right. XAI_2
 XAI_2 .[hidden]right. XAI_3
-XAI_3 .right. XAI_N
+XAI_3 .[hidden]right. XAI_N
 
-usecase "Property<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nClassification" as label_1
+usecase "Prop<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>Trans<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nVote" as label_1
 
-usecase "Property<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>\nClassification" as label_11
+usecase "Prop<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>Trans<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>\nVote" as label_11
 
-usecase "Property<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nClassification" as label_2
+usecase "Prop<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>Trans<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nVote" as label_2
 
-usecase "Property<FONT POINT-SIZE='10'><SUB>3</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nClassification" as label_3
+usecase "Prop<FONT POINT-SIZE='10'><SUB>3</SUB></FONT>Trans<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nVote" as label_3
 
-usecase "Property<FONT POINT-SIZE='10'><SUB>n</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>m</SUB></FONT>\nClassification" as label_N
+usecase "Prop<FONT POINT-SIZE='10'><SUB>n</SUB></FONT>Trans<FONT POINT-SIZE='10'><SUB>m</SUB></FONT>\nVote" as label_N
 
 XAI_1 --> label_1
 XAI_11 --> label_11
 XAI_2 --> label_2
 XAI_3 --> label_3
 XAI_N --> label_N
+
+database "Confidence\nKnowledgebase" as kb
+
+label_1 --> kb
+label_11 --> kb
+label_2 --> kb
+label_3 --> kb
+label_N --> kb
 
 @enduml

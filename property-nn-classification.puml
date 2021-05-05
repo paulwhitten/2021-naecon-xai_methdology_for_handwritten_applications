@@ -28,11 +28,11 @@ agent "Property<FONT POINT-SIZE='10'><SUB>2</SUB></FONT>\nTransform<FONT POINT-S
 agent "Property<FONT POINT-SIZE='10'><SUB>3</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>1</SUB></FONT>\nNeural Net" as XAI_3
 agent "Property<FONT POINT-SIZE='10'><SUB>n</SUB></FONT>\nTransform<FONT POINT-SIZE='10'><SUB>m</SUB></FONT>\nNeural Net" as XAI_N
 
-TRANS_1 --> XAI_1 : "Transformed\nImage"
-TRANS_11 --> XAI_11 : "Transformed\nImage"
-TRANS_2 --> XAI_2 : "Transformed\nImage"
-TRANS_3 --> XAI_3 : "Transformed\nImage"
-TRANS_N --> XAI_N : "Transformed\nImage"
+TRANS_1 --> XAI_1
+TRANS_11 --> XAI_11
+TRANS_2 --> XAI_2
+TRANS_3 --> XAI_3
+TRANS_N --> XAI_N
 
 XAI_1 .[hidden]right. XAI_11
 XAI_11 .[hidden]right. XAI_2
