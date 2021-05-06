@@ -58,7 +58,7 @@ The methodology is depicted in Fig.~\ref{voting} where $I_i$ represents the $i$t
 \label{voting}
 \end{figure}
 
-Further detailing explainable properties, we considered how explainable properties could be mapped to the input.  In this work we pose the use of input transformations that are related to explainable properties to aid in classification while providing human understandable rationale for classification decisions.  We chose to use one transformation per property in this work.  However, each property may have multiple such transformations.  This is represented in Fig.~\ref{proptrans} where the outer square represents the $j$th property square in Fig.~\ref{voting}.  The boxes labeled $T_x$ indicate the $x$th transformation of the input related to that property.  The transformed input is fed to a Neural Network Architecture (NNA) to make classification decisions based on the transformed input.  Output from the property transform decisions then flow to the voter as shown in Fig.~\ref{voting}.
+Further detailing explainable properties, we considered how explainable properties could be mapped to the input.  In this work we pose the use of input transformations that are related to explainable properties to aid in classification while providing human understandable rationale for classification decisions.  We chose to use one transformation per property in this work.  However, each property may have multiple such transformations.  This is represented in Fig.~\ref{proptrans} where the outer square represents the $j$th property square from Fig.~\ref{voting}.  The boxes labeled $T_x$ indicate the $x$th transformation of the input related to that property.  The transformed input is fed to a Neural Network Architecture (NNA) to make classification decisions based on the transformed input.  Output from the property transform decisions then flow to the voter as shown in Fig.~\ref{voting}.
 
  \begin{figure}[htbp]
 \centerline{\includegraphics[width=90mm]{./images/property_transforms.png}}
@@ -66,7 +66,7 @@ Further detailing explainable properties, we considered how explainable properti
 \label{proptrans}
 \end{figure}
 
-This work explores two voting model schemes.  Some voting schemes involve probabilistic algorithms while others involve ML algorithms.  Regardless of the voting algorithm, it was useful to construct and utilize a knowledgebase for storing detailed training and test results of the transformation NNs.  The knowledgebase was also important in estimating confidence used in voting algorithms. 
+This work explores two voting model schemes.  One voting scheme is probabilistic while the second involves an ML algorithm.  Regardless of the voting algorithm, it was useful to construct and utilize a knowledgebase for storing detailed training and test results of the transformation NNs.  The knowledgebase was also important in estimating confidence used in voting algorithms. 
  
 Our methodology for explainability involves the following steps:
 \begin{itemize}
@@ -79,10 +79,11 @@ Our methodology for explainability involves the following steps:
 \item Use a test dataset to provide feedback.
 \end{itemize}
 
+\subsection{Explainable Properties}
 The initial step is to discover explainable properties.  An explainable property is an attribute of a sample in the problem domain that may differentiate classes and provide a rationale for classification.  In the MNIST handwritten digit database, we pose explainable properties such as the stroke, circle, ellipse, lines, endpoints, and crossings.
 
 \bgroup
-\renewcommand{\arraystretch}{2}
+\renewcommand{\arraystretch}{1.8}
 %\setlength\tabcolsep{2mm}
 \begin{figure}
 \centering
@@ -115,38 +116,52 @@ Line & Hough Line & \raisebox{-.5\height}{\includegraphics[width=10mm]{./digit-i
 \end{figure}
 \egroup
 
-Data transformations are next defined and implemented to represent a sample for classification according to the initial step's explainable properties.  Transforms may be known algorithms of feature detection and extraction that represent property characteristics.  In our example, we used digital image processing techniques related to the properties.  Examples of original digit images and transforms are shown in Fig.~\ref{transsample}.  The stroke property used a morphological skeleton transformation.  A Hough transform was used with the appropriate formula for circle and ellipse properties.  The line property utilized the skeleton and a linear Hough Transform to identify lines over a threshold of six pixels.  The Multiple circle or ellipse used circle and ellipse transforms with non-overlapping results.  The morphological skeleton was also used to find endpoints, pixels with only one activated neighbor, and crossings, pixels with more than two activated neighbors.   The endpoints and crossings are shown with neighboring pixels partially activated to aid in ML classification.
- 
+\subsection{Transformations}
+Data transformations are next defined and implemented to represent a sample for classification according to the initial step's explainable properties.  Transforms may be known algorithms of feature detection and extraction that represent property characteristics.  In our example, we used digital image processing techniques related to the properties.  Examples of original digit images and transforms are shown in Fig.~\ref{transsample}.
+
+The Stroke property is meant to minimally represent the digit, removing the variability of the line thickness among digits.  The morphological skeleton, is a one pixel connected representation preserving the topology of the digit.  We utilized the Lee\cite{Lee1994} algorithm for obtaining skeletons of the MNIST handwritten digits.
+
+A Hough transform was used with the appropriate formula for circle and ellipse properties.  The line property utilized the skeleton and a linear Hough Transform to identify lines over a threshold of six pixels.  The Multiple circle or ellipse transform used circle and ellipse transforms with non-overlapping results.  The morphological skeleton was also used to find endpoints, pixels with only one activated neighbor, and crossings, pixels with more than two activated neighbors.   The endpoints and crossings are shown in Fig.~\ref{transsample} with neighboring pixels partially activated to aid in classification.
+
+\subsection{Training Data} 
 We next generate a transformed training dataset by submitting all elements from the original training set to the property transformations.  The output from each property transformation is stored separately for training each property-specific NNA. 
 
+\subsection{Trained Property NNAs}
 The next step involves initializing unique NNAs representing each property and then using supervised ML techniques to train the NNAs using only the output of that particular property transform and the original labels.  This results in trained NNAs for each property.
 
+\subsection{Knowledgebase}
 After training, we again process the training set and populate a knowledgebase.  The knowledgebase stores the original training label, and each property's classification results from the property NNA.  The knowledgebase is used in constructing the voting strategy. 
 
+\subsection{Voting}
 We next devise a voting strategy using information from the knowledgebase.  The purpose for the voting strategy is to select among the multiple and potentially conflicting votes from the properties.
 
 The first voting scheme we present is probabilistic.  In this scheme, we use the knowledgebase to identify each NNA's likelihood to correctly digits.  Likelihoods are weighted and compared against the alternative classifications to provide confidence metrics for classification.  If there is disagreement among properties, this scheme will produce multiple classifications each with a confidence metrics.  The classification with the highest confidence is selected by the voter.
 
 The second classification scheme utilizes the knowledgebase as a set to train a NNA to select a digit on property transform results.  Using this scheme, we show very good results.  In this scheme we do not produce a confidence metric from the Knowledgebase but can present each digit's value form the voting NNA as confidence.
 
-Finally, when test data is presented to the XAI architecture, we evaluate the results and determine if they are sufficient or if more properties are needed.
+\subsection{feedback}
+Finally, when test data is presented to the XAI architecture, we evaluate the results and determine if they are sufficient or if more properties or transforms are needed.
 
-Results obtained using the MNIST digit database using the probabilistic voting engine were $91.8\%$ while results obtained from the NN voting engine were $97.3\%$ using the MNIST test dataset.
+\section{Results}
 
-The 9 properties we identified along with transformation and identifiers for those properties, used in as shown in TABLE ~\ref{table:tblproptrans}.
+Results obtained using the MNIST digit database using the probabilistic voting engine were $91.9\%$ while results obtained from the NN voting engine were $95.9\%$ using the MNIST test dataset.
 
-The Stroke property is meant to minimally represent the digit, removing the variability of the line thickness in among digits.  Using the skeleton, which is a one pixel connected representation preserving the topology of the digit.  We utilized the Lee\cite{Lee1994} algorithm for obtaining skeletons of the MNIST handwritten digits.
+The 9 properties we identified along with transformation and identifiers for those properties, are shown in TABLE ~\ref{table:tblproptrans}.  The property identifiers are used in later tables and figures.
 
-Mean digit intensity plots of the property transformation NNAs are shown for training data for digits 5 and 6 in the following figures.
+Tables ~\ref{table:digit5out} and ~\ref{table:digit6out} show the NNA outputs and statistics for properties for digits 5 and 6 respectively obtained from the knowledgebase.  These tables represent the results from processing all of the digits 5 and 6.   The rows 0 through 9 in the tables represent the means of the NNA outputs for each digit.  The first line of the tables represents the percent of correct classifications of each property.  The second, third and fourth rows represent the standard deviation, kurtosis, and skew of the digit outputs for each property.  The last two rows are the false positive and false negative rates.
 
-Results obtained using the probabilistic voting engine were $91.8\%$ while results obtained from the NN voting engine were $97.3\%$ using the MNIST test dataset.
+We observe that the Stroke property ($P_0$) performed very well with 100\% accuracy in both figures.  The next highest performing property in both tables was the endpoint property ($P_5$) with 85.4\% and 93.3\% accuracy.  The digit 6 also had good classification results for the fill properties ($P_6$ and $P_8$) due to enclosed regions in the digit 6.  The digit 6 also performed better than the 5 in the properties related to the circle and ellipse ($P_2$, $P_3$, and $P_4$).
 
-\begin{table}
+The digit 5 had among the poorest performance as observed by the relatively low percent correct and high false negative rates observed in Table. ~\ref{table:digit5out}.  The digit 1 also had notably poor performance for circle and ellipse related properties.  Obviously, this was due to the lack of a curve in the digit 1.
+
+The mean digit values from the Property NNAs are also represented  in Fig.~\ref{digit5votes} and ~\ref{digit6votes} as three dimensional surface plots for digits 5 and 6.  TODO add annotations to images.
+
+\begin{table}[htbp]
 \caption{Properties, Transforms and Property Identifiers}
 \centering
 \begin{tabular}{| c | c | c |}
 \hline
- Explainable Property & Transform(s) & Identifier \\
+ Explainable Property & Transform & Identifier \\
 \hline\hline
 Stroke & Skeleton & $P_0$ \\
 \hline
@@ -169,6 +184,152 @@ Enclosed Region of Skeleton & Skeleton Flood Fill & $P_8$ \\
 \end{tabular}
 \label{table:tblproptrans}
 \end{table}
+
+ \begin{figure}[htbp]
+\centerline{\includegraphics[width=15mm]{./digit-images/5-0.png}}
+\caption{Example 1,  a handwritten five}
+\label{example1}
+\end{figure}
+
+We present three examples of digits with the property classifications and explainable rationale and explain the vote based on the probabilistic voting scheme.
+
+\begin{table}[htbp]
+\caption{Property Votes for Example 1}
+\centering
+\begin{tabular}{| c | c | c |}
+\hline
+ Property Id & Vote & Weight \\
+\hline\hline
+$P_0$ & 5 & 1.000 \\ 
+\hline
+$P_1$ & 6 & 0.465 \\
+\hline
+$P_2$ & - & - \\
+\hline
+$P_3$ & - & - \\
+\hline
+$P_4$ & 6 & 0.490 \\
+\hline
+$P_5$ & 5 & 0.854 \\
+\hline
+$P_6$ & - & - \\
+\hline
+$P_7$ & 5 & 0.700 \\
+\hline
+$P_8$ & - & - \\
+\hline
+\end{tabular}
+\label{table:example1}
+\end{table}
+
+The first example  digit, labeled a 5, is shown in Fig.~\ref{example1}.  The property votes for this example are shown in Table ~\ref{table:example1}.  The weight is the correctness metric of a property for the voted upon digit from the knowledgebase.   Cells without a vote are properties that did not have a sufficiently strong opinion on a particular digit.  The stroke, endpoint and line properties suggest the digit is a 5 with weights $1.000 + 0.854 + 0.700 =  2.554$.  The circle and ellipse + circle properties suggest that the digit is a 6 with weights $0.465 + 0.490 = 0.955$.  Taking the ratio of the sum of a digit's weights over the total weights we see that a 5 is predicted and selected by the voter with  $2.554/(2.554+0.955) = 73\%$ confidence and rationale explaining that the input has stroke, endpoint, and line properties consistent with a 5.  Alternatively, a 6 was suggested but not chosen by the voter with $0.955/(2.554+0.955) = 27\%$ confidence based on the input having circle and ellipse + circle properties consistent with the digit 6.
+
+ \begin{figure}[htbp]
+\centerline{\includegraphics[width=15mm]{./digit-images/9-9.png}}
+\caption{Example 2,  a handwritten nine}
+\label{example2}
+\end{figure}
+
+\begin{table}[htbp]
+\caption{Property Votes for Example 2}
+\centering
+\begin{tabular}{| c | c | c |}
+\hline
+ Property Id & Vote & Weight \\
+\hline\hline
+$P_0$ & 9 & 1.000 \\ 
+\hline
+$P_1$ & 3 & 0.327 \\
+\hline
+$P_2$ & 5 & 0.057 \\
+\hline
+$P_3$ & - & - \\
+\hline
+$P_4$ & - & - \\
+\hline
+$P_5$ & 6 & 0.932 \\
+\hline
+$P_6$ & 9 & 0.809 \\
+\hline
+$P_7$ & - & - \\
+\hline
+$P_8$ & 9 & 0.821 \\
+\hline
+\end{tabular}
+\label{table:example1}
+\end{table}
+
+The second handwritten digit,  labeled a 9, is shown in Fig.~\ref{example2}.  This example shows that the weight for the digit 9 votes are $1.000 + 0.809 + 0.821 = 2.630$ and the total weight for all votes are $2.630 + 0.932 + 0.327 + 0.057 = 3.946$.  This results in a 9 being selected by the voter with a $67\%$ confidence and an explanation that the stroke,  enclosed region, and enclosed region of the skeleton were consistent with those of a 9.  Other digits suggested but not selected by the voter were a 6 with $24\%$ confidence due to endpoint properties similar to those of a 6, a 3 with an $8\%$ confidence due to circle properties that are consistent with the digit 3, and finally a 5 with a $1\%$ confidence due to crossing properties.
+
+ \begin{figure}[htbp]
+\centerline{\includegraphics[width=15mm]{./digit-images/2-4.png}}
+\caption{Example 3  a handwritten two}
+\label{example3}
+\end{figure}
+
+\begin{table}[htbp]
+\caption{Property Votes for Example 3}
+\centering
+\begin{tabular}{| c | c | c |}
+\hline
+ Property Id & Vote & Weight \\
+\hline\hline
+$P_0$ & 2 & 1.000 \\ 
+\hline
+$P_1$ & 3 & 0.327 \\
+\hline
+$P_2$ & - & - \\
+\hline
+$P_3$ & 2 & 0.161 \\
+\hline
+$P_4$ & 3 & 0.387 \\
+\hline
+$P_5$ & 2 & 0.938 \\
+\hline
+$P_6$ & - & - \\
+\hline
+$P_7$ & 2 & 0.639 \\
+\hline
+$P_8$ & - & - \\
+\hline
+\end{tabular}
+\label{table:example3}
+\end{table}
+
+The third handwritten digit, labeled a 2, resulted in the voter selecting the digit 2 with a $79\%$ confidence due to stroke, ellipse, endpoint, and line properties consistent with the digit 2.  A three was suggested with $21\%$ confidence due to circle and ellipse circle properties.
+
+\begin{table}[htbp]
+\caption{NNA Voter results for examples}
+\centering
+\begin{tabular}{| c | c | c | c |}
+\hline
+ Digit & Ex. 1 & Ex. 2 & Ex. 3 \\
+\hline\hline
+0 & 1.92e-06 & 1.11e-08 & 2.98e-07\\ 
+\hline
+1 & 1.44e-06 & 1.52e-07 & 1.93e-08 \\
+\hline
+2 & 1.40e-06 & 4.54e-09 & 9.99e-01 \\
+\hline
+3 & 5.12e-08 & 2.48e-04 & 5.26e-06 \\
+\hline
+4 & 1.79e-08 & 1.33e-06 & 5.91e-06 \\
+\hline
+5 & 9.99e-01 & 2.31e-07 & 1.41e-06 \\
+\hline
+6 & 7.69e-07 & 2.23e-04 & 5.83e-07 \\
+\hline
+7 & 4.88e-07 & 4.93e-08 & 1.89e-09 \\
+\hline
+8 & 2.47e-07 & 5.71e-06 & 5.51e-07 \\
+\hline
+9 & 5.21e-07 & 9.99e-01 & 1.71e-08 \\
+\hline
+\end{tabular}
+\label{table:nnavoter}
+\end{table}
+
+Table~\ref{table:nnavoter} shows the results of the ML Voting scheme on the three examples.  The ten rows in the table represent the corresponding digits.  The columns for examples 1 through 3 contain the values output by the NNA when presented with the property votes from the examples.  We observe that in each example the ML Voter overwhelmingly selects the appropriate digit.
 
 \begin{table*}
 \caption{Digit 5 Outputs}
@@ -209,6 +370,7 @@ false pos rt & 0.0 & 0.5 & 0.2 & 0.4 & 0.7 & 0.4 & 0.0 & 0.3 & 0.0 \\
 false neg rt & 0.0 & 84.8 & 94.1 & 78.8 & 78.3 & 13.4 & 96.2 & 29.2 & 94.5 \\
 \hline
 \end{tabular}
+\label{table:digit5out}
 \end{table*}
 
 
@@ -252,19 +414,20 @@ false pos rt & 0.0 & 2.6 & 2.5 & 0.5 & 2.2 & 0.7 & 0.2 & 0.6 & 0.0 \\
 false neg rt & 0.0 & 53.3 & 50.1 & 67.5 & 50.7 & 6.6 & 18.1 & 28.1 & 16.8 \\
 \hline
 \end{tabular}
+\label{table:digit6out}
 \end{table*}
 
 
 
 \begin{figure*}[htbp]
-\centerline{\includegraphics[width=160mm]{./images/digit-5.png}}
-\caption{Property Transformation votes for the digit 5}
+\centerline{\includegraphics[width=150mm]{./images/digit-5.png}}
+\caption{Mean property NNA output for the digit 5}
 \label{digit5votes}
 \end{figure*}
 
 \begin{figure*}[htbp]
-\centerline{\includegraphics[width=160mm]{./images/digit-6.png}}
-\caption{Property Transformation votes for the digit 6}
+\centerline{\includegraphics[width=150mm]{./images/digit-6.png}}
+\caption{Mean property NNA output for the digit 6}
 \label{digit6votes}
 \end{figure*}
 
