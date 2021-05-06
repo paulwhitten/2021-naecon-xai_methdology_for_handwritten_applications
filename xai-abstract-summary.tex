@@ -46,7 +46,7 @@ This work approaches the widely studied problem of classifying images of handwri
 
 While we approach XAI for a specific classification problem in the MNIST handwritten digit database, which consists of 28x28 images of handwritten digits into the ten decimal digits, we feel the methodology translates to other problems of explainable classification among a finite set of classes.
 
-This work aims to pose a means of explaining the classification to a human.  We do not wish to compete with established algorithms that perform exceptionally well in classification of input.   The effort required in applying the methodology in this work is significant compared to training a classifier that will act as a black box, and therefore not be explainable.
+This work aims to pose a means of explaining the classification to a human.  We do not wish to compete with established algorithms that perform exceptionally well in classification of input \cite{lecun98} \cite{keysers07} \cite{schm2012}.  The effort required in applying the methodology in this work is significant compared to training a classifier that will act as a black box, and therefore not be explainable.
 
 Our methodology for explainability is summarized as the use of explainable properties and related transformations of the input to make distinct classification decisions for each property.  Those distinct classifications are input to a voter to provide the best classification result.  Rationale, based on the explainable properties, are combined with the voter result to provide an explanation. 
 
@@ -417,8 +417,6 @@ false neg rt & 0.0 & 53.3 & 50.1 & 67.5 & 50.7 & 6.6 & 18.1 & 28.1 & 16.8 \\
 \label{table:digit6out}
 \end{table*}
 
-
-
 \begin{figure*}[htbp]
 \centerline{\includegraphics[width=150mm]{./images/digit-5.png}}
 \caption{Mean property NNA output for the digit 5}
@@ -431,8 +429,7 @@ false neg rt & 0.0 & 53.3 & 50.1 & 67.5 & 50.7 & 6.6 & 18.1 & 28.1 & 16.8 \\
 \label{digit6votes}
 \end{figure*}
 
-
-\section{References}
+%\section{References}
 \bibliographystyle{plain}
 \bibliography{references}{}
 
