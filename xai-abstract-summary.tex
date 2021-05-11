@@ -27,11 +27,11 @@ pcw@case.edu, fxw12@case.edu, cap2@case.edu}
 
 \begin{abstract}
 There has been explosive growth of practical AI in recent years.
-However, results of AI systems are not readily explainable to humans.
-A major concern of current AI systems is an inability to explain decisions.
-Explainable artificial intelligence has been posed to mitigate these concerns.
-This work is an attempt to explore a methodology that provides explanations
-for classification decisions.
+%However, inferential results of AI systems are not readily explainable to humans.
+A major concern of current AI systems is an inability to explain these inferential decisions.
+%Explainable artificial intelligence has been posed to mitigate these concerns.
+This work explores an Explainable Artificial Intelligence (XAI) methodology that provides explanations
+for classification decisions.  Experimental results using the MNIST handwritten digit database are provided with explainable conclusions.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -46,11 +46,11 @@ This work approaches the widely studied problem of classifying images of handwri
 
 While we approach XAI for a specific classification problem in the MNIST handwritten digit database, which consists of 28x28 images of handwritten digits into the ten decimal digits, we feel the methodology translates to other problems of explainable classification among a finite set of classes.
 
-This work aims to pose a means of explaining the classification to a human.  We do not wish to compete with established algorithms that perform exceptionally well in classification of input \cite{lecun98} \cite{keysers07} \cite{schm2012}.  The effort required in applying the methodology in this work is significant compared to training a classifier that will act as a black box, and therefore not be explainable.
+This work aims to pose a means of explaining the classification to a human.  We do not wish to compete with established algorithms that perform exceptionally well in classification of input \cite{keysers07} \cite{lecun98} \cite{schm2012}.  The effort required in applying the methodology in this work is significant compared to training a classifier that will act as a black box, and therefore not be explainable.
 
 Our methodology for explainability is summarized as the use of explainable properties and related transformations of the input to make distinct classification decisions for each property.  Those distinct classifications are input to a voter to provide the best classification result.  Rationale, based on the explainable properties, are combined with the voter result to provide an explanation. 
 
-The methodology is depicted in Fig.~\ref{voting} where $I_i$ represents the $i$th input.  The $P_x$ squares represent logic including distinct neural network architectures to make classifications based on properties where $x$ is 1 through n.  The Voter Model Engine is then used to consider each of the choices from the properties and provide the best decision.  Based on property results an explanation is assembled in XAI.   The explanation consists of the explainable properties that contribute to the classification.   The decision along with the property-based explanation is presented to a user.
+The methodology is depicted in Fig.~\ref{voting} where $I_i$ represents the $i$th input.  The $P_x$ squares represent logic including distinct neural network architectures to make classifications based on properties where $x$ is 1 through n.   $Q_i$ represents the $i$th property's classification output.  The Voter Model Engine is then used to consider each of the choices, $Q_i$, from the properties and provide the best decision.  Based on property results an explanation is assembled in XAI.   The explanation consists of the explainable properties that contribute to the classification.   The decision along with the property-based explanation is presented to a user.
 
  \begin{figure}[htbp]
 \centerline{\includegraphics[width=95mm]{./images/voting_prop_nn_2.png}}
@@ -62,7 +62,7 @@ Further detailing explainable properties, we considered how explainable properti
 
  \begin{figure}[htbp]
 \centerline{\includegraphics[width=90mm]{./images/property_transforms.png}}
-\caption{Architecture of a single property for multiple tranformations.}
+\caption{Architecture of a single property for multiple transformations.}
 \label{proptrans}
 \end{figure}
 
@@ -87,41 +87,43 @@ The initial step is to discover explainable properties.  An explainable property
 %\setlength\tabcolsep{2mm}
 \begin{figure}
 \centering
-\begin{tabular}{ | p{0.25\linewidth} | p{0.25\linewidth} | c c c | }
-\hline
-Property & Transform & $I_i$ &  &  $T_i$ \\
+\begin{tabular}{  c | p{0.23\linewidth} | p{0.23\linewidth} | ccc | }
+\cline{2-6}
+& Property $P_i$ & Transform & $I_i$ &  &  $T_i$ \\
 \hline \hline
-Stroke & Skeleton & \raisebox{-.5\height}{\includegraphics[width=10mm]{./digit-images/4-11.png}} & $\rightarrow$ & \raisebox{-.5\height}{\includegraphics[width=10mm]{./digit-images/4-11-skel.png}} \\
+$P_1$ & Stroke & Skeleton & \raisebox{-.5\height}{\includegraphics[width=8mm]{./digit-images/4-11.png}} & $\rightarrow$ & \raisebox{-.5\height}{\includegraphics[width=8mm]{./digit-images/4-11-skel.png}} \\
 \hline
-Circle & Hough Circle & \raisebox{-.5\height}{\includegraphics[width=10mm]{./digit-images/6-17.png}} & $\rightarrow$ & \raisebox{-.5\height}{\includegraphics[width=10mm]{./digit-images/6-17-circle.png}} \\
+$P_2$ & Circle & Hough Circle & \raisebox{-.5\height}{\includegraphics[width=8mm]{./digit-images/6-17.png}} & $\rightarrow$ & \raisebox{-.5\height}{\includegraphics[width=8mm]{./digit-images/6-17-circle.png}} \\
 \hline
-Ellipse & Hough Ellipse & \raisebox{-.5\height}{\includegraphics[width=10mm]{./digit-images/0-3.png}} & $\rightarrow$ & \raisebox{-.5\height}{\includegraphics[width=10mm]{./digit-images/0-3-ellipse.png}} \\
+$P_3$ & Crossings & Crossings & \raisebox{-.5\height}{\includegraphics[width=8mm]{./digit-images/4-2.png}} & $\rightarrow$ & \raisebox{-.5\height}{\includegraphics[width=8mm]{./digit-images/4-2-crossing.png}} \\
 \hline
-Multiple Circle or Ellipse & Hough Ellipse and Circle & \raisebox{-.5\height}{\includegraphics[width=10mm]{./digit-images/8-4.png}} & $\rightarrow$ & \raisebox{-.5\height}{\includegraphics[width=10mm]{./digit-images/8-4-ellipse-circle.png}} \\
+$P_4$ & Ellipse & Hough Ellipse & \raisebox{-.5\height}{\includegraphics[width=8mm]{./digit-images/0-3.png}} & $\rightarrow$ & \raisebox{-.5\height}{\includegraphics[width=8mm]{./digit-images/0-3-ellipse.png}} \\
 \hline
-Enclosed Region & Flood Fill & \raisebox{-.5\height}{\includegraphics[width=10mm]{./digit-images/0-2.png}} & $\rightarrow$ & \raisebox{-.5\height}{\includegraphics[width=10mm]{./digit-images/0-2-fill.png}} \\
+$P_5$ & Multiple Circle or Ellipse & Hough Ellipse and Circle & \raisebox{-.5\height}{\includegraphics[width=8mm]{./digit-images/8-4.png}} & $\rightarrow$ & \raisebox{-.5\height}{\includegraphics[width=8mm]{./digit-images/8-4-ellipse-circle.png}} \\
 \hline
-Enclosed Stroke & Skeleton Flood Fill & \raisebox{-.5\height}{\includegraphics[width=10mm]{./digit-images/8-3.png}} & $\rightarrow$ & \raisebox{-.5\height}{\includegraphics[width=10mm]{./digit-images/8-3-skel-fill.png}} \\
+$P_6$ & Endpoints & Endpoints & \raisebox{-.5\height}{\includegraphics[width=8mm]{./digit-images/2-2.png}} & $\rightarrow$ & \raisebox{-.5\height}{\includegraphics[width=8mm]{./digit-images/2-2-endpoint.png}} \\
 \hline
-Crossings & Crossings & \raisebox{-.5\height}{\includegraphics[width=10mm]{./digit-images/4-2.png}} & $\rightarrow$ & \raisebox{-.5\height}{\includegraphics[width=10mm]{./digit-images/4-2-crossing.png}} \\
+$P_7$ & Enclosed Region & Flood Fill & \raisebox{-.5\height}{\includegraphics[width=8mm]{./digit-images/0-2.png}} & $\rightarrow$ & \raisebox{-.5\height}{\includegraphics[width=8mm]{./digit-images/0-2-fill.png}} \\
 \hline
-Endpoints & Endpoints & \raisebox{-.5\height}{\includegraphics[width=10mm]{./digit-images/2-2.png}} & $\rightarrow$ & \raisebox{-.5\height}{\includegraphics[width=10mm]{./digit-images/2-2-endpoint.png}} \\
+$P_8$ & Line & Hough Line & \raisebox{-.5\height}{\includegraphics[width=8mm]{./digit-images/7-20.png}} & $\rightarrow$ & \raisebox{-.5\height}{\includegraphics[width=8mm]{./digit-images/7-20-line.png}} \\
 \hline
-Line & Hough Line & \raisebox{-.5\height}{\includegraphics[width=10mm]{./digit-images/7-20.png}} & $\rightarrow$ & \raisebox{-.5\height}{\includegraphics[width=10mm]{./digit-images/7-20-line.png}} \\
+$P_9$ & Enclosed Stroke & Skeleton Flood Fill & \raisebox{-.5\height}{\includegraphics[width=8mm]{./digit-images/8-3.png}} & $\rightarrow$ & \raisebox{-.5\height}{\includegraphics[width=8mm]{./digit-images/8-3-skel-fill.png}} \\
 \hline
 \end{tabular}
 \centering
-\caption{Sample Handwritten Digits ($I_i$) and Transforms ($T_i$)}
+\caption{Properties and transforms for the MNIST example}
 \label{transsample}
 \end{figure}
 \egroup
 
 \subsection{Transformations}
-Data transformations are next defined and implemented to represent a sample for classification according to the initial step's explainable properties.  Transforms may be known algorithms of feature detection and extraction that represent property characteristics.  In our example, we used digital image processing techniques related to the properties.  Examples of original digit images and transforms are shown in Fig.~\ref{transsample}.
+Data transformations are next defined and implemented to represent a sample for classification according to the initial step's explainable properties.  Transforms may be known algorithms of feature detection and extraction that represent property characteristics.  In our example, we used digital image processing techniques related to the properties.  The nine properties and corresponding transformations that we used for the MNIST examples in Fig.~\ref{transsample}.  We also show some sample original digits and a representation of their transforms.
 
-The Stroke property is meant to minimally represent the digit, removing the variability of the line thickness among digits.  The morphological skeleton, is a one pixel connected representation preserving the topology of the digit.  We utilized the Lee\cite{Lee1994} algorithm for obtaining skeletons of the MNIST handwritten digits.
+The Stroke property $P_1$ is meant to minimally represent the digit, removing the variability of the line thickness among digits.  The morphological skeleton,  transformation $T_1$, is a one pixel connected representation preserving the topology of the digit and providing the representation of the stroke.  We utilized the Lee\cite{Lee1994} algorithm for obtaining skeletons of the MNIST handwritten digits.
 
-A Hough transform was used with the appropriate formula for circle and ellipse properties.  The line property utilized the skeleton and a linear Hough Transform to identify lines over a threshold of six pixels.  The Multiple circle or ellipse transform used circle and ellipse transforms with non-overlapping results.  The morphological skeleton was also used to find endpoints, pixels with only one activated neighbor, and crossings, pixels with more than two activated neighbors.   The endpoints and crossings are shown in Fig.~\ref{transsample} with neighboring pixels partially activated to aid in classification.
+$P_2$ is the circle property with the corresponding transform $T_2$ the Hough Circle.  $P_3$ is the crossings property, representing the intersection of lines in a digit.  The corresponding transform, $T_3$, for finding crossings involved taking the skeleton and then finding activated pixels with more than two neighbors.  The ellipse property, $P_4$m involved a transform, $T_4$, taking the Hough Ellipse of a digit.  $P_5$ for multiple circle or ellipse involved a transform, $T_5$, where Hough Ellipse and Hough Circle regions were compared to find non-overlapping combinations.   The endpoint property, $P_6$ involved a transform, $T_6$, where the skeleton was taken and then activated pixels with only one digit were identified.  Property $P_7$ for an enclosed region involved transform $T_7$ involved a flood fill that does not result in edge pixels.  The line property, $P_8$, involves transform $T_8$ which takes non-overlapping Hough Lines of a digit.  Finally, property $P_9$ which considers an enclosed section of a stroke takes the flood fill of a skeleton.
+
+Note that the endpoints and crossings are shown in Fig.~\ref{transsample} with the single endpoint activated and neighboring pixels partially activated to aid in classification.
 
 \subsection{Training Data} 
 We next generate a transformed training dataset by submitting all elements from the original training set to the property transformations.  The output from each property transformation is stored separately for training each property-specific NNA. 
@@ -135,7 +137,7 @@ After training, we again process the training set and populate a knowledgebase. 
 \subsection{Voting}
 We next devise a voting strategy using information from the knowledgebase.  The purpose for the voting strategy is to select among the multiple and potentially conflicting votes from the properties.
 
-The first voting scheme we present is probabilistic.  In this scheme, we use the knowledgebase to identify each NNA's likelihood to correctly digits.  Likelihoods are weighted and compared against the alternative classifications to provide confidence metrics for classification.  If there is disagreement among properties, this scheme will produce multiple classifications each with a confidence metrics.  The classification with the highest confidence is selected by the voter.
+The first voting scheme we present is probabilistic.  In this scheme, we use the knowledgebase to identify each property NNA's effectiveness to correctly predict a digit class.   The effectiveness $E_{\pi,\gamma}$ for a property, $\pi$, to select a particular class, $\gamma$,  is obtained from the knowledgebase and is given by $E_{\pi,\gamma}$ and is equal to the ratio of the number of correct classifications of property $\pi$ of the class $\gamma$ to the total number of elements of class $\gamma$.   We take the sum of effectiveness metrics, for the properties that select a class $(\gamma)$, to obtain a weight $W_\gamma$ for that class.  The confidence for the class $\gamma$ is given by $C_\gamma=\frac{W_\gamma}{\sum\limits_iW_i}$.  The denominator is the sum of all weights for classes that were selected.  If multiple classes are selected by the properties, the class with the highest confidence is will be chosen by the voter.
 
 The second classification scheme utilizes the knowledgebase as a set to train a NNA to select a digit on property transform results.  Using this scheme, we show very good results.  In this scheme we do not produce a confidence metric from the Knowledgebase but can present each digit's value form the voting NNA as confidence.
 
@@ -146,157 +148,204 @@ Finally, when test data is presented to the XAI architecture, we evaluate the re
 
 Results obtained using the MNIST digit database using the probabilistic voting engine were $91.9\%$ while results obtained from the NN voting engine were $95.9\%$ using the MNIST test dataset.
 
-The 9 properties we identified along with transformation and identifiers for those properties, are shown in TABLE ~\ref{table:tblproptrans}.  The property identifiers are used in later tables and figures.
+Tables ~\ref{table:digit5out} and ~\ref{table:digit6out} show the NNA outputs and statistics for properties for digits file and six respectively obtained from the knowledgebase.  These tables represent the results from processing all of the digits labeled five and six respectively/.   The digit rows in the tables represent the means of the NNA outputs for each digit.  The first line of the tables represents likelihood, $L_{\pi,\gamma}$.  The second, third and fourth rows represent the standard deviation, kurtosis, and skew of the digit outputs for each property.  The last two rows are the false positive and false negative rates.
 
-Tables ~\ref{table:digit5out} and ~\ref{table:digit6out} show the NNA outputs and statistics for properties for digits 5 and 6 respectively obtained from the knowledgebase.  These tables represent the results from processing all of the digits 5 and 6.   The rows 0 through 9 in the tables represent the means of the NNA outputs for each digit.  The first line of the tables represents the percent of correct classifications of each property.  The second, third and fourth rows represent the standard deviation, kurtosis, and skew of the digit outputs for each property.  The last two rows are the false positive and false negative rates.
+We observe that the Stroke property ($P_0$) performed very well with 100\% accuracy in both figures.  The next highest performing property in both tables was the endpoint property ($P_5$) with 85.4\% and 93.3\% accuracy.  The digit six also had good classification results for the fill properties ($P_6$ and $P_8$) due to enclosed regions in the digit 6.  The digit six also performed better than the five in the properties related to the circle and ellipse ($P_2$, $P_3$, and $P_4$).
 
-We observe that the Stroke property ($P_0$) performed very well with 100\% accuracy in both figures.  The next highest performing property in both tables was the endpoint property ($P_5$) with 85.4\% and 93.3\% accuracy.  The digit 6 also had good classification results for the fill properties ($P_6$ and $P_8$) due to enclosed regions in the digit 6.  The digit 6 also performed better than the 5 in the properties related to the circle and ellipse ($P_2$, $P_3$, and $P_4$).
+The digit five had among the poorest performance as observed by the relatively low percent correct and high false negative rates observed in Table. ~\ref{table:digit5out}.  The digit one also had notably poor performance for circle and ellipse related properties.  Obviously, this was due to the lack of a curve in a one.
 
-The digit 5 had among the poorest performance as observed by the relatively low percent correct and high false negative rates observed in Table. ~\ref{table:digit5out}.  The digit 1 also had notably poor performance for circle and ellipse related properties.  Obviously, this was due to the lack of a curve in the digit 1.
+The mean digit values from the Property NNAs are also represented  in Fig.~\ref{digit5votes} and ~\ref{digit6votes} as three dimensional surface plots for digits five and  and six.
 
-The mean digit values from the Property NNAs are also represented  in Fig.~\ref{digit5votes} and ~\ref{digit6votes} as three dimensional surface plots for digits 5 and 6.  TODO add annotations to images.
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=95mm]{./images/digit-5.png}}
+\caption{Mean property NNA output for the digit 5}
+\label{digit5votes}
+\end{figure}
 
-\begin{table}[htbp]
-\caption{Properties, Transforms and Property Identifiers}
-\centering
-\begin{tabular}{| c | c | c |}
-\hline
- Explainable Property & Transform & Identifier \\
-\hline\hline
-Stroke & Skeleton & $P_0$ \\
-\hline
-Circle & Hough Circle & $P_1$ \\
-\hline
-Crossings & Crossing Point & $P_2$ \\
-\hline
-Ellipse & Hough Ellipse & $P_3$ \\
-\hline
-Ellipse + Circle & Hough Ellipse and Circle & $P_4$ \\
-\hline
-Endpoints & Endpoints & $P_5$ \\
-\hline
-Enclosed Region & Flood Fill & $P_6$ \\
-\hline
-Line & Hough Line & $P_7$ \\
-\hline
-Enclosed Region of Skeleton & Skeleton Flood Fill & $P_8$ \\
-\hline
-\end{tabular}
-\label{table:tblproptrans}
-\end{table}
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=95mm]{./images/digit-6.png}}
+\caption{Mean property NNA output for the digit 6}
+\label{digit6votes}
+\end{figure}
+
+%\begin{table}[htbp]
+%\caption{Properties, Transforms and Property Identifiers}
+%\centering
+%\begin{tabular}{| c | c | c |}
+%\hline
+% Identifier & Explainable Property & Transform \\
+%\hline\hline
+%$P_1$ & Stroke & Skeleton \\
+%\hline
+%$P_x$ & Circle & Hough Circle \\
+%\hline
+%$P_x$ & Crossings & Crossing Point \\
+%\hline
+%$P_x$ & Ellipse & Hough Ellipse \\
+%\hline
+%$P_x$ & Ellipse + Circle & Hough Ellipse and Circle \\
+%\hline
+%$P_x$ & Endpoints & Endpoints \\
+%\hline
+%$P_x$ & Enclosed Region & Flood Fill \\
+%\hline
+%$P_x$ & Line & Hough Line \\
+%\hline
+%$P_x$ & Enclosed Region of Skeleton & Skeleton Flood Fill \\
+%\hline
+%\end{tabular}
+%\label{table:tblproptrans}
+%\end{table}
 
  \begin{figure}[htbp]
 \centerline{\includegraphics[width=15mm]{./digit-images/5-0.png}}
-\caption{Example 1,  a handwritten five}
+\caption{Example 1 of a handwritten digit five}
 \label{example1}
 \end{figure}
 
 We present three examples of digits with the property classifications and explainable rationale and explain the vote based on the probabilistic voting scheme.
 
 \begin{table}[htbp]
-\caption{Property Votes for Example 1}
+\caption{Probabilistic voting and explainability for Example 1}
 \centering
-\begin{tabular}{| c | c | c |}
+\begin{tabular}{| c | c | c | c | p{0.08\linewidth} | p{0.08\linewidth} |}
 \hline
- Property Id & Vote & Weight \\
-\hline\hline
-$P_0$ & 5 & 1.000 \\ 
+ Prop. & Vote & $E_{\pi,5}$ & $E_{\pi,6}$ & $X_5$ & $X_6$ \\
+\hline \cline{0-5}
+$P_1$ & 5 & 1.000 & - & \checkmark & - \\ 
 \hline
-$P_1$ & 6 & 0.465 \\
+$P_2$ & 6 & - & 0.465 & - & \checkmark \\
 \hline
-$P_2$ & - & - \\
+$P_3$ & - & - &  - & - & - \\
 \hline
-$P_3$ & - & - \\
+$P_4$ & - & - & - & - & - \\
 \hline
-$P_4$ & 6 & 0.490 \\
+$P_5$ & 6 & - & 0.490 & - & \checkmark \\
 \hline
-$P_5$ & 5 & 0.854 \\
+$P_6$ & 5 & 0.854 & - & \checkmark & - \\
 \hline
-$P_6$ & - & - \\
+$P_7$ & - & - & - & - & - \\
 \hline
-$P_7$ & 5 & 0.700 \\
+$P_8$ & 5 & 0.700 & - & \checkmark & - \\
 \hline
-$P_8$ & - & - \\
-\hline
+$P_9$ & - & - & - & - & - \\
+\hline \cline{0-5}
+\multicolumn{2}{|c|}{Weight Totals} & $2.554$ & $0.955$ & \multicolumn{2}{c|}{$\sum W_\gamma=3.509$} \\
+\cline{0-5}
+\multicolumn{2}{|c|}{Confidence} & $73\%$ & $24\%$ & \multicolumn{2}{c}{} \\
+\cline{0-3}
 \end{tabular}
 \label{table:example1}
 \end{table}
 
-The first example  digit, labeled a 5, is shown in Fig.~\ref{example1}.  The property votes for this example are shown in Table ~\ref{table:example1}.  The weight is the correctness metric of a property for the voted upon digit from the knowledgebase.   Cells without a vote are properties that did not have a sufficiently strong opinion on a particular digit.  The stroke, endpoint and line properties suggest the digit is a 5 with weights $1.000 + 0.854 + 0.700 =  2.554$.  The circle and ellipse + circle properties suggest that the digit is a 6 with weights $0.465 + 0.490 = 0.955$.  Taking the ratio of the sum of a digit's weights over the total weights we see that a 5 is predicted and selected by the voter with  $2.554/(2.554+0.955) = 73\%$ confidence and rationale explaining that the input has stroke, endpoint, and line properties consistent with a 5.  Alternatively, a 6 was suggested but not chosen by the voter with $0.955/(2.554+0.955) = 27\%$ confidence based on the input having circle and ellipse + circle properties consistent with the digit 6.
+The first example  digit, labeled a five, is shown in Fig.~\ref{example1}.  Voting and explainability is detailed in Table ~\ref{table:example1}.  The property votes for this example are shown in the Vote column.  Cells without a vote are properties that did not have a sufficiently strong opinion on a particular digit, i.e., no class was above a threshold. for a property  The $E_{\iota,x}$ columns give the effectiveness of a property $\iota$ to correctly select class $x$.  The effectiveness values are from the knowledgebase.   The stroke $(P_1)$, endpoint $(P_6)$ and line $(P_8)$ properties suggest the digit is a five with effectiveness $E_{1,5}= 1.000$, $E_{6,5}=0.854$, and $E_{8,5}=0.700$ summing to a weight $W_5=2.554$.  The circle $(P_2)$ and ellipse + circle properties $(P_5)$ suggest that the digit is a six with effectiveness $E_{2,6}=0.465$ and $E_{5,6}=0.490$  summing to a weight of $W_6=0.955$.  Taking the sum of the total weights, $\sum\limits_\gamma W_\gamma=3.509$.  Confidence for the five, is given as $C_5=\frac{2.554}{3.509} = 73\%$.  Alternatively, six was suggested by properties but not chosen by the voter because confidence is $C_6=\frac{0.955}{3.509}=27\% < 73\%$.  We also observe that the explainability, $X_x$, columns provide rationale for each of the classes that were selected based on the selecting properties.   E.g.,  the column $X_5$ indicates that the five was selected because the stroke, endpoint, and line properties are consistent with a five.   We see in $X_6$ that the six was suggested because circle and ellipse + circle properties were consistent with those of a six. 
 
  \begin{figure}[htbp]
 \centerline{\includegraphics[width=15mm]{./digit-images/9-9.png}}
-\caption{Example 2,  a handwritten nine}
+\caption{Example 2 of a handwritten digit nine}
 \label{example2}
 \end{figure}
 
-\begin{table}[htbp]
-\caption{Property Votes for Example 2}
-\centering
-\begin{tabular}{| c | c | c |}
-\hline
- Property Id & Vote & Weight \\
-\hline\hline
-$P_0$ & 9 & 1.000 \\ 
-\hline
-$P_1$ & 3 & 0.327 \\
-\hline
-$P_2$ & 5 & 0.057 \\
-\hline
-$P_3$ & - & - \\
-\hline
-$P_4$ & - & - \\
-\hline
-$P_5$ & 6 & 0.932 \\
-\hline
-$P_6$ & 9 & 0.809 \\
-\hline
-$P_7$ & - & - \\
-\hline
-$P_8$ & 9 & 0.821 \\
-\hline
-\end{tabular}
-\label{table:example2}
-\end{table}
+%\begin{table}[htbp]
+%\caption{Property Votes for Example 2}
+%\centering
+%\begin{tabular}{| c | c | c |}
+%\hline
+% Property Id & Vote & Weight \\
+%\hline\hline
+%$P_0$ & 9 & 1.000 \\ 
+%\hline
+%$P_1$ & 3 & 0.327 \\
+%\hline
+%$P_2$ & 5 & 0.057 \\
+%\hline
+%$P_3$ & - & - \\
+%\hline
+%$P_4$ & - & - \\
+%\hline
+%$P_5$ & 6 & 0.932 \\
+%\hline
+%$P_6$ & 9 & 0.809 \\
+%\hline
+%$P_7$ & - & - \\
+%\hline
+%$P_8$ & 9 & 0.821 \\
+%\hline
+%\end{tabular}
+%\label{table:example2}
+%\end{table}
 
-The second example handwritten digit,  labeled a 9, is shown in Fig.~\ref{example2}.  Table ~\ref{table:example2} shows that the weight for the digit 9 votes are $1.000 + 0.809 + 0.821 = 2.630$ and the total weight for all votes are $2.630 + 0.932 + 0.327 + 0.057 = 3.946$.  This results in a 9 being selected by the voter with a $67\%$ confidence and an explanation that the stroke,  enclosed region, and enclosed region of the skeleton were consistent with those of a 9.  Other digits suggested but not selected by the voter were a 6 with $24\%$ confidence due to endpoint properties similar to those of a 6, a 3 with an $8\%$ confidence due to circle properties that are consistent with the digit 3, and finally a 5 with a $1\%$ confidence due to crossing properties.
+The second example handwritten digit,  labeled a nine, is shown in Fig.~\ref{example2}.  Table ~\ref{table:example2} shows the property predictions, voting results, and rationale for example 3.  In this example three properties selected the digit nine and three other properties selected the digits three, five, and six.  The results from the voter for this example were that nine was selected by the voter with a $67\%$ confidence and an explanation that the stroke,  enclosed region, and enclosed region of the stroke were consistent with those of a nine.
 
  \begin{figure}[htbp]
 \centerline{\includegraphics[width=15mm]{./digit-images/2-4.png}}
-\caption{Example 3  a handwritten two}
+\caption{Example 3 of a handwritten digit two}
 \label{example3}
 \end{figure}
 
+%\begin{table}[htbp]
+%\caption{Property Votes for Example 3}
+%\centering
+%\begin{tabular}{| c | c | c |}
+%\hline
+% Property Id & Vote & Weight \\
+%\hline\hline
+%$P_0$ & 2 & 1.000 \\ 
+%\hline
+%$P_1$ & 3 & 0.327 \\
+%\hline
+%$P_2$ & - & - \\
+%\hline
+%$P_3$ & 2 & 0.161 \\
+%\hline
+%$P_4$ & 3 & 0.387 \\
+%\hline
+%$P_5$ & 2 & 0.938 \\
+%\hline
+%$P_6$ & - & - \\
+%\hline
+%$P_7$ & 2 & 0.639 \\
+%\hline
+%$P_8$ & - & - \\
+%\hline
+%\end{tabular}
+%\label{table:example3}
+%\end{table}
+
 \begin{table}[htbp]
-\caption{Property Votes for Example 3}
+\caption{Probabilistic voting and explainability for Example 3}
 \centering
-\begin{tabular}{| c | c | c |}
+\begin{tabular}{| c | c | c | c | p{0.08\linewidth} | p{0.08\linewidth} |}
 \hline
- Property Id & Vote & Weight \\
-\hline\hline
-$P_0$ & 2 & 1.000 \\ 
+ Prop. & Vote & $E_{\pi,52}$ & $E_{\pi,3}$ & $X_2$ & $X_3$ \\
+\hline \cline{0-5}
+$P_1$ & 2 & 1.000 & - & \checkmark & - \\ 
 \hline
-$P_1$ & 3 & 0.327 \\
+$P_2$ & 3 & - & 0.327 & - & \checkmark \\
 \hline
-$P_2$ & - & - \\
+$P_3$ & - & - &  - & - & - \\
 \hline
-$P_3$ & 2 & 0.161 \\
+$P_4$ & 2 & 0.161 & - & \checkmark & - \\
 \hline
-$P_4$ & 3 & 0.387 \\
+$P_5$ & 3 & - & 0.387 & - & \checkmark \\
 \hline
-$P_5$ & 2 & 0.938 \\
+$P_6$ & 2 & 0.938 & - & \checkmark & - \\
 \hline
-$P_6$ & - & - \\
+$P_7$ & - & - & - & - & - \\
 \hline
-$P_7$ & 2 & 0.639 \\
+$P_8$ & 2 & 0.639 & - & \checkmark & - \\
 \hline
-$P_8$ & - & - \\
-\hline
+$P_9$ & - & - & - & - & - \\
+\hline \cline{0-5}
+\multicolumn{2}{|c|}{Weight Totals} & $2.738$ & $0.714$ & \multicolumn{2}{c|}{$\sum W_\gamma=3.452$} \\
+\cline{0-5}
+\multicolumn{2}{|c|}{Confidence} & $79\%$ & $21\%$ & \multicolumn{2}{c}{} \\
+\cline{0-3}
 \end{tabular}
 \label{table:example3}
 \end{table}
 
-The third example handwritten digit, labeled a 2, is shown in Fig. ~\ref{example3} and Table ~\ref{table:example3}.  In this case,  the voter selects the digit 2 with a $79\%$ confidence due to stroke, ellipse, endpoint, and line properties consistent with the digit 2.  A three was suggested with $21\%$ confidence due to circle and ellipse circle properties.
+The third example handwritten digit, labeled a two, is shown in Fig. ~\ref{example3} and Table ~\ref{table:example3}.  In this case,  the voter selects the digit two with a $79\%$ confidence due to stroke, ellipse, endpoint, and line properties consistent with the digit two.  A three was suggested with $21\%$ confidence due to circle and ellipse circle properties.
 
 \begin{table}[htbp]
 \caption{NNA Voter results for examples}
@@ -309,13 +358,13 @@ The third example handwritten digit, labeled a 2, is shown in Fig. ~\ref{example
 \hline
 1 & 1.44e-06 & 1.52e-07 & 1.93e-08 \\
 \hline
-2 & 1.40e-06 & 4.54e-09 & 9.99e-01 \\
+2 & 1.40e-06 & 4.54e-09 & \textbf{9.99e-01} \\
 \hline
 3 & 5.12e-08 & 2.48e-04 & 5.26e-06 \\
 \hline
 4 & 1.79e-08 & 1.33e-06 & 5.91e-06 \\
 \hline
-5 & 9.99e-01 & 2.31e-07 & 1.41e-06 \\
+5 & \textbf{9.99e-01} & 2.31e-07 & 1.41e-06 \\
 \hline
 6 & 7.69e-07 & 2.23e-04 & 5.83e-07 \\
 \hline
@@ -323,21 +372,53 @@ The third example handwritten digit, labeled a 2, is shown in Fig. ~\ref{example
 \hline
 8 & 2.47e-07 & 5.71e-06 & 5.51e-07 \\
 \hline
-9 & 5.21e-07 & 9.99e-01 & 1.71e-08 \\
+9 & 5.21e-07 & \textbf{9.99e-01} & 1.71e-08 \\
 \hline
 \end{tabular}
 \label{table:nnavoter}
 \end{table}
 
-Table~\ref{table:nnavoter} shows the results of the ML Voting scheme on the three examples.  The ten rows in the table represent the corresponding digits.  The columns for examples 1 through 3 contain the values output by the NNA when presented with the property votes from the examples.  We observe that in each example the ML Voter overwhelmingly selects the appropriate digit.
+Table~\ref{table:nnavoter} shows the results of the ML Voting scheme on the three examples.  The ten rows in the table represent the corresponding digits.  The columns for examples 1 through 3 contain the values output by the NNA when presented with the property votes from the examples.  We observe that in each example the ML Voter overwhelmingly selects the appropriate digit shown in bold.
+
+\begin{table*}[htbp]
+\caption{Probabilistic voting and explainability for Example 2}
+\centering
+\begin{tabular}{| c | c | c | c | c | c | c | c | c | c |}
+\hline
+ Prop. & Vote & $E_{\pi,3}$ & $E_{\pi,5}$ & $E_{\pi,6}$ & $E_{\pi,9}$ & $X_3$ & $X_5$ & $X_6$ & $X_9$ \\
+\hline \cline{0-9}
+$P_1$ & 9 & - & - & - & 1.00 & - & - & - & \checkmark \\ 
+\hline
+$P_2$ & 3 & 0.327 & - & - & - & \checkmark & - & - & - \\
+\hline
+$P_3$ & 5 & - &  0.057 & - & - & - & \checkmark & - & - \\
+\hline
+$P_4$ & - & - & - & - & - & - & - & - & - \\
+\hline
+$P_5$ & - & - & - & - & - & - & - & - & - \\
+\hline
+$P_6$ & 6 & - & - & 0.933 & - & - & - & \checkmark & - \\
+\hline
+$P_7$ & 9 & - & - & - & 0.809 & - & - & - & \checkmark \\
+\hline
+$P_8$ & - & - & - & - & - & - & - & - & - \\
+\hline
+$P_9$ & 9 & - & - & - & 0.821 & - & - & - & \checkmark \\
+\hline \cline{0-9}
+\multicolumn{2}{|c|}{Weight} & 0.327 & 0.057 & 0.933 & 2.630 & \multicolumn{4}{c|}{$\sum W_\gamma=3.946$} \\
+\cline{0-9}
+\multicolumn{2}{|c|}{Confidence} & $8\%$ & $1\%$ & $24\%$ & $67\%$ & \multicolumn{4}{c}{} \\
+\cline{0-5}
+\end{tabular}
+\label{table:example2}
+\end{table*}
 
 \begin{table*}
 \caption{Digit 5 Outputs}
-\centering
-\begin{tabular}{ | c ||  c | c | c | c | c | c | c | c | c |}
- digit 5 & $P_0$ & $P_1$ & $P_2$ & $P_3$ & $P_4$ & $P_5$ & $P_6$ & $P_7$ & $P_8$ \\
+\centering\begin{tabular}{ | c ||  c | c | c | c | c | c | c | c | c |}
+ digit 5 & $P_1$ & $P_2$ & $P_3$ & $P_4$ & $P_5$ & $P_6$ & $P_7$ & $P_8$ & $P_9$ \\
 \hline \hline
-pct. correct  & 100.0 & 14.2 & 5.7 & 20.8 & 21.5 & 85.4 & 3.8 & 70.0 & 5.5 \\
+effectiveness $E_{\pi,5}$  & 100.0 & 14.2 & 5.7 & 20.8 & 21.5 & 85.4 & 3.8 & 70.0 & 5.5 \\
 \hline
 $\sigma$ & 0.300& 0.076& 0.082& 0.068& 0.089& 0.252& 0.074& 0.211& 0.077 \\
 \hline
@@ -365,23 +446,20 @@ skew & 3.162& 1.913& 0.330& 2.324& 2.413& 3.073& -0.025& 3.116& 0.061 \\
 \hline
 9 & 0.000 & 0.044 & 0.019 & 0.069 & 0.043 & 0.009 & 0.032 & 0.034 & 0.028 \\
 \hline
-false pos rt & 0.0 & 0.5 & 0.2 & 0.4 & 0.7 & 0.4 & 0.0 & 0.3 & 0.0 \\
+false positive  & 0.0 & 0.5 & 0.2 & 0.4 & 0.7 & 0.4 & 0.0 & 0.3 & 0.0 \\
 \hline
-false neg rt & 0.0 & 84.8 & 94.1 & 78.8 & 78.3 & 13.4 & 96.2 & 29.2 & 94.5 \\
+false negative  & 0.0 & 84.8 & 94.1 & 78.8 & 78.3 & 13.4 & 96.2 & 29.2 & 94.5 \\
 \hline
 \end{tabular}
 \label{table:digit5out}
 \end{table*}
 
-
-
 \begin{table*}
-\caption{Digit 6 outputs}
-\centering
-\begin{tabular}{ | c ||  c | c | c | c | c | c | c | c | c |}
- digit 6 & $P_0$ & $P_1$ & $P_2$ & $P_3$ & $P_4$ & $P_5$ & $P_6$ & $P_7$ & $P_8$ \\
+\caption{Digit 6 Outputs}
+\centering\begin{tabular}{ | c ||  c | c | c | c | c | c | c | c | c |}
+ digit 6 & $P_1$ & $P_2$ & $P_3$ & $P_4$ & $P_5$ & $P_6$ & $P_7$ & $P_8$ & $P_9$ \\
 \hline \hline
-pct. correct  & 100.0 & 46.5 & 49.5 & 32.0 & 49.0 & 93.3 & 81.8 & 70.7 & 83.2 \\
+effectiveness $E_{\pi,5}$  & 100.0 & 46.5 & 49.5 & 32.0 & 49.0 & 93.3 & 81.8 & 70.7 & 83.2 \\
 \hline
 $\sigma$ & 0.300& 0.112& 0.130& 0.094& 0.133& 0.264& 0.240& 0.209& 0.246 \\
 \hline
@@ -409,25 +487,13 @@ skew & 3.162& 2.842& 2.886& 3.132& 3.048& 3.153& 3.148& 3.138& 3.147 \\
 \hline
 9 & 0.000 & 0.029 & 0.026 & 0.077 & 0.038 & 0.000 & 0.007 & 0.027 & 0.005 \\
 \hline
-false pos rt & 0.0 & 2.6 & 2.5 & 0.5 & 2.2 & 0.7 & 0.2 & 0.6 & 0.0 \\
+false positive  & 0.0 & 2.6 & 2.5 & 0.5 & 2.2 & 0.7 & 0.2 & 0.6 & 0.0 \\
 \hline
-false neg rt & 0.0 & 53.3 & 50.1 & 67.5 & 50.7 & 6.6 & 18.1 & 28.1 & 16.8 \\
+false negative  & 0.0 & 53.3 & 50.1 & 67.5 & 50.7 & 6.6 & 18.1 & 28.1 & 16.8 \\
 \hline
 \end{tabular}
 \label{table:digit6out}
 \end{table*}
-
-\begin{figure*}[htbp]
-\centerline{\includegraphics[width=150mm]{./images/digit-5.png}}
-\caption{Mean property NNA output for the digit 5}
-\label{digit5votes}
-\end{figure*}
-
-\begin{figure*}[htbp]
-\centerline{\includegraphics[width=150mm]{./images/digit-6.png}}
-\caption{Mean property NNA output for the digit 6}
-\label{digit6votes}
-\end{figure*}
 
 %\section{References}
 \bibliographystyle{plain}
