@@ -44,7 +44,7 @@ Recent advances in Machine Learning (ML) have brought about wide adoption of ML 
 
 This work approaches the widely studied problem of classifying images of handwritten digits into the ten decimal digit classes, zero through nine, from an Explainable Artificial Intelligence (XAI) perspective.  Our goal in this work is to provide explainable ML classification in the form of rationale for the classification decisions.
 
-While we approach XAI for a specific classification problem in the MNIST handwritten digit database, which consists of 28x28 images of handwritten digits into the ten decimal digits, we feel the methodology translates to other problems of explainable classification among a finite set of classes.
+While we approach XAI for a specific classification problem in the MNIST handwritten digit database, we feel the methodology translates to other problems of explainable classification among a finite set of classes.
 
 This work aims to pose a means of explaining the classification to a human.  We do not wish to compete with established algorithms that perform exceptionally well in classification of input \cite{keysers07} \cite{lecun98} \cite{schm2012}.  The effort required in applying the methodology in this work is significant compared to training a classifier that will act as a black box, and therefore not be explainable.
 
@@ -72,6 +72,10 @@ Explainable properties are the basis of this work and are defined as descriptive
 
 The Voter Model Engine relies on input classifications, $Q_i$, from the explainable properties and feedback from the XAI block to make a final classification decision.   This work explores two voting model schemes.  One voting scheme is probabilistic while the second involves an ML algorithm. 
 
+The first voting scheme we present is probabilistic.  In this scheme, we use the knowledgebase to identify each explainable property transformation's effectiveness to correctly predict a class.   The effectiveness for an explainable property transformation, $i$, to select a particular class, $x$,  is given by $E_{i,x}$ which is equal to the ratio of the number of correct classifications of explainable property transformation $i$ of the class $x$ to the total number of elements of class $x$.   We take the sum of effectiveness metrics, for the properties that select a class, $x$, to obtain a weight, $W_x$, for that class.  The confidence for the class $x$ is given by $C_x=\frac{W_x}{\sum\limits_jW_j}$.  The denominator is the sum of all weights for classes that were selected.  If multiple classes are selected by the properties, the class with the highest confidence is will be chosen by the voter.
+
+The second classification scheme utilizes the explainable property transformation classification outputs and labels from the training set to train a NNA in the voter model engine.  The NNA is used to perform the final classification from the explainable property transformation outputs. 
+
 The XAI block consists of a knowledgebase and logic to process inputs from explainable property classifications and the Voter Model Engine.   The purpose of the XAI block is to generate an explanation for the user and provide feedback to inform the Voter Model Engine.  The XAI knowledgebase contains information on explainable properties,  a store of training results, and metrics related to the effectiveness of properties.  The explanation provided by the XAI block consists of rationale, related to the explainable properties, that contributed to the classification decision as well as confidence. 
 
  \begin{figure}[htbp]
@@ -85,49 +89,42 @@ We pose the use of property transformations as a mechanism to aid in property-ba
 \section{Methodology}
  
 Our methodology for achieving explainable ML classification involves the following steps:
-\begin{itemize}
-\item Discover explainable properties.
-\item Define transformations for explainable properties.
-\item Transform training data.
-\item Produce trained explainable property-specific NNAs.
-\item Build a Knowledgebase across the explainable properties.
-\item Devise a voting scheme.
-\item Use a test dataset to provide feedback.
-\end{itemize}
+%\begin{itemize}
+%\item Discover explainable properties.
+%\item Define transformations for explainable properties.
+%\item Transform training data.
+%\item Produce trained explainable property-specific NNAs.
+%\item Build a Knowledgebase across the explainable properties.
+%\item Devise a voting scheme.
+%\item Use a test dataset to provide feedback.
+%\end{itemize}
 
-\subsection{Explainable Properties}
+\subsubsection{Discover Explainable Properties}
 The initial step in the methodology is to discover explainable properties.   An explainable property is an attribute of a sample in the problem domain that may differentiate classes and provide a rationale for classification.  In the MNIST handwritten digit database example, we pose explainable properties such as the stroke, circles, lines, endpoints, and crossings.
 
-\subsection{Transformations}
-Data transformations are next defined and implemented to represent a sample for classification according to  explainable properties.  Transforms may be known algorithms of feature detection and extraction that relate to explainable properties.  In the MNIST example, we used digital image processing techniques such as the morphological skeleton, Hough Circle and Line Transforms, and flood fill.
+\subsubsection{Define and Implement Transformations}
+Data transformations are next defined and implemented to represent a sample for classification according to  explainable properties.  Transforms may be known algorithms of feature detection and extraction that relate to explainable properties.  In the MNIST example, we used digital image processing techniques such as the morphological skeleton, Hough Circle \& Line Transforms, and flood fill.
 
-\subsection{Training Data} 
+\subsubsection{Transform Training Data} 
 We next generate a transformed training dataset by submitting all elements from the original training set to the property transformations.  The output from each property transformation is stored separately for training each property transform specific NNA. 
 
-\subsection{Trained Property NNAs}
+\subsubsection{Produce Trained Property NNAs}
 The next step involves initializing unique NNAs representing each property and then using supervised ML techniques to train the NNAs using only the output of that particular property transform and the original labels.  This results in trained NNAs for each explainable property transform.
 
-\subsection{Knowledgebase}
-After training, we again process the training set and populate the XAI knowledgebase.  The knowledgebase stores the original training label, and each property's classification results from the property NNA.  Metrics on the effectiveness of each explainable property for classes are also stored int he knowledgebase.  The knowledgebase is used in constructing and providing feedback in the voting strategy. 
+\subsubsection{Build an XAI Knowledgebase}
+After training, we again process the training set and populate the XAI knowledgebase.  The knowledgebase stores information on properties, the original training label, and each property's classification results from the property NNA.  Metrics on the effectiveness of each explainable property for classes are also stored in the knowledgebase.  The knowledgebase is used in constructing and providing feedback in the voting strategy as well as for composing the classification rationale in the XAI block.
 
-\subsection{Voting}
+\subsubsection{Devise a Voting Scheme}
 We next devise a voting strategy in the Voter Model Engine using information from the knowledgebase.  The purpose for the voting strategy is to select among the multiple and potentially conflicting votes from the explainable property transformation classifications.
 
-The first voting scheme we present is probabilistic.  In this scheme, we use the knowledgebase to identify each explainable property transformation's effectiveness to correctly predict a class.   The effectiveness for an explainable property transformation, $\pi$, to select a particular class, $\gamma$,  is given by $E_{\pi,\gamma}$ which is equal to the ratio of the number of correct classifications of explainable property transformation $\pi$ of the class $\gamma$ to the total number of elements of class $\gamma$.   We take the sum of effectiveness metrics, for the properties that select a class $(\gamma)$, to obtain a weight $W_\gamma$ for that class.  The confidence for the class $\gamma$ is given by $C_\gamma=\frac{W_\gamma}{\sum\limits_iW_i}$.  The denominator is the sum of all weights for classes that were selected.  If multiple classes are selected by the properties, the class with the highest confidence is will be chosen by the voter.
+\subsubsection{Provide User Feedback}
+Finally, when test data is presented to the XAI architecture, we evaluate the results and determine if they are sufficient or if more explainable properties or transforms are needed.
 
-The second classification scheme utilizes the explainable property transformation classification outputs and labels from the training set to train a NNA in the voter model engine.  The NNA is used to perform the final classification from the explainable property transformation outputs. 
+\section{Examples}
 
-\subsection{feedback}
-Finally, when test data is presented to the XAI architecture, we evaluate the results and determine if they are sufficient or if more properties or transforms are needed.
+In this work, we utilized the well-studied  MNIST handwritten digit database to develop and test the methodology.   Further details of experiments with MNIST and examples of classification and explainability follow.
 
-\section{Results}
-
-In this work, we utilized the well-studied  MNIST handwritten digit database to develop and test the methodology.  We introduce two sets of metrics on to compare aggregate results.  The first metric is Identification Accuracy which gauges the correctness of the system in performing classification.  Identification Accuracy is the ratio of the number of correct classifications to the total number of classifications of the voter model engine.  The metric Explainability Quality is used to estimate the correspondence or connection of explanations with classification decisions.  Explainability Quality is the ratio of classifications decisions with at least one property justifying the classification to the total number of classifications.   In both cases, values close to one are desired.
-Results for Identification Accuracy obtained using the probabilistic voting scheme on the MNIST dataset were $0.919$ while results obtained from the NNA voting scheme were $0.959$.  Results for Explainability Quality using the probabilistic voter scheme were $1.00$ while results for the NNA voting scheme were $0.982$.  Note that in the probabilistic scheme, the voter model engine always selects a class from the property votes while the NNA scheme, the NNA is trained based on labels on the training set which may not correspond to a vote from a property.
-
-Further details of experiments with MNIST and examples follow.
-
-Fig.~\ref{transsample} depicts a table of the explainable properties and corresponding transformations used for the MNIST dataset.  The figure shows some sample original digits and the resulting transforms.
+Fig.~\ref{transsample} depicts the explainable properties and corresponding transformations used for the MNIST dataset in this work.  The figure also shows example MNIST digits, $I_i$, and their resulting transforms, $T_i$.
 
 \bgroup
 \renewcommand{\arraystretch}{1.8}
@@ -163,11 +160,13 @@ $P_9$ & Enclosed Region & Skeleton Flood Fill & \raisebox{-.5\height}{\includegr
 \end{figure}
 \egroup
 
-The Stroke property is meant to minimally represent the path of the writing implement to trace the digit.  The morphological skeleton,  transformation $T_1$, is a one pixel connected representation preserving the topology of the digit and providing the representation of the stroke.  We utilized the Lee\cite{Lee1994} algorithm for obtaining skeletons of the MNIST handwritten digits.
+The Stroke property is meant to represent the minimal path of the writing implement to trace the digit.  The morphological skeleton,  transformation $T_1$, is a one pixel connected representation preserving the topology of the digit and providing a representation of the stroke.  We utilized the Lee\cite{Lee1994} algorithm for obtaining skeletons of the MNIST handwritten digits.
 
-$P_2, P_4,$ and $P_5$ are the circle property with corresponding transforms $T_2$ the Hough Circle, $T_4$ the Hough Ellipse and $T_5$ accounting for multiple non-overlapping circles and ellipses in the transform.  $P_3$ is the crossings property, representing the intersection of strokes in a digit.  The corresponding transform, $T_3$, for finding crossings involved taking the skeleton and then finding activated pixels with more than two neighbors.   The endpoint property, $P_6$ involved a transform, $T_6$, where the skeleton was taken and then activated pixels with only one digit were identified.  Property $P_7$ and $P_9$ for an enclosed region involved transform $T_7$ which involved a flood fill that does not result in edge pixels and $T_9$ the flood fill of the skeleton.  The line property, $P_8$, involves transform $T_8$ which takes non-overlapping Hough Lines of a digit.
+$P_2, P_4,$ and $P_5$ are the circle property with corresponding transforms $T_2$ the Hough Circle, $T_4$ the Hough Ellipse and $T_5$ accounting for multiple non-overlapping circles and ellipses in the transform.
 
-Note that the endpoints and crossings shown in Fig.~\ref{transsample} have a single pixel, representing each endpoint or crossing, activated and neighboring pixels partially activated to aid in classification.
+$P_3$ is the crossings property, representing the intersection of lines in a digit.  The corresponding transform, $T_3$, for finding crossings involved taking the skeleton and then finding activated pixels with more than two neighbors.   The endpoints property, $P_6$ involved a transform, $T_6$, where the skeleton was taken and then activated pixels with only one neighbor were identified.  Note that the endpoints and crossings shown in Fig.~\ref{transsample} have a single pixel, representing each endpoint or crossing, activated and neighboring pixels partially activated to aid in ML classification.
+
+Property $P_7$ and $P_9$ for enclosed regions involved transform $T_7$ which involved a flood fill and $T_9$ the flood fill of the skeleton.  The line property, $P_8$, involves transform $T_8$ which takes non-overlapping Hough Lines of a digit.
 
 Tables ~\ref{table:digit5out} and ~\ref{table:digit6out} show the NNA outputs and statistics for properties for digits five and six.  These tables represent the results from processing all of the digits labeled five and six respectively.   The digit rows in the tables represent the means of the NNA outputs for each digit.  The first line of the tables represents effectiveness, $E_{\pi,\gamma}$.  The second, third and fourth rows represent the standard deviation, kurtosis, and skew of the digit outputs for each property.  The last two rows are the false positive and false negative rates.
 
@@ -224,7 +223,7 @@ The mean digit values from the Property NNAs are also represented  in Fig.~\ref{
 \label{example1}
 \end{figure}
 
-We present three interesting examples of digits with the property classifications and explainable rationale and explain the vote based on the probabilistic voting scheme.
+We next present three interesting examples of MNIST digits along with the property classifications, property effectiveness, and explainability.  We step through the procedures of the probabilistic voting scheme to present the classification results for the example as well as the explainability rationale and the confidence from XAI.
 
 \begin{table}[htbp]
 \caption{Probabilistic voting and explainability for Example 1}
@@ -233,7 +232,7 @@ We present three interesting examples of digits with the property classification
 \cline{3-6}
 \multicolumn{2}{c}{} & \multicolumn{2}{|c|}{Effectiveness} & \multicolumn{2}{c|}{Explainability} \\
 \hline
- Prop. & Vote & $E_{\pi,5}$ & $E_{\pi,6}$ & $X_5$ & $X_6$ \\
+ Prop. & Vote & $E_{i,5}$ & $E_{i,6}$ & $X_5$ & $X_6$ \\
 \hline \cline{0-5}
 $P_1$ & 5 & 1.000 & - & \checkmark & - \\ 
 \hline
@@ -261,7 +260,7 @@ $P_9$ & - & - & - & - & - \\
 \label{table:example1}
 \end{table}
 
-The first example  digit, labeled a five, is shown in Fig.~\ref{example1}.  Voting and explainability is detailed in Table ~\ref{table:example1}.  The property votes, corresponding to $Q_i$ in Fig.~\ref{voting}, for this example are shown in the Vote column.  Cells with dashes are properties that did not have a sufficiently strong opinion on a particular digit, i.e., no class was above a threshold.   The $E_{\iota,x}$ columns give the effectiveness of a property $\iota$ to correctly select class $x$.  The effectiveness values are from the knowledgebase.   The stroke $(P_1)$, endpoint $(P_6)$ and line $(P_8)$ properties suggest the digit is a five with effectiveness $E_{1,5}= 1.000$, $E_{6,5}=0.854$, and $E_{8,5}=0.700$ summing to a weight $W_5=2.554$.  The circle $(P_2)$ and $(P_5)$ properties suggest that the digit is a six with effectiveness $E_{2,6}=0.465$ and $E_{5,6}=0.490$  summing to a weight of $W_6=0.955$.  Taking the sum of the total weights, $\sum\limits_\gamma W_\gamma=3.509$.  Confidence for the five, is given as $C_5=\frac{2.554}{3.509} = 73\%$.  Alternatively, six was suggested by properties but not chosen by the voter because confidence is $C_6=\frac{0.955}{3.509}=27\% < 73\%$.  We also observe that the explainability, $X_x$, columns provide rationale for each of the classes that were selected based on the selecting properties.   E.g.,  the column $X_5$ indicates that the five was selected because the stroke, endpoint, and line properties are consistent with a five.   We see in $X_6$ that the six was suggested because circle properties were consistent with those of a six. 
+The first example  digit, labeled a five, is shown in Fig.~\ref{example1}.  Voting and explainability is detailed in Table ~\ref{table:example1}.  The property votes, corresponding to $Q_i$ in Fig.~\ref{voting}, for this example are shown in the Vote column.  Cells with dashes are properties that did not have a sufficiently strong opinion on a particular digit, i.e., no class was above a threshold.   The $E_{i,x}$ columns give the effectiveness of a property $i$ to correctly select class $x$.  The effectiveness values are from the knowledgebase.   The stroke $(P_1)$, endpoint $(P_6)$ and line $(P_8)$ properties suggest the digit is a five with effectiveness $E_{1,5}= 1.000$, $E_{6,5}=0.854$, and $E_{8,5}=0.700$ summing to a weight $W_5=2.554$.  The circle $(P_2)$ and $(P_5)$ properties suggest that the digit is a six with effectiveness $E_{2,6}=0.465$ and $E_{5,6}=0.490$  summing to a weight of $W_6=0.955$.  Taking the sum of the total weights, $\sum\limits_\gamma W_\gamma=3.509$.  Confidence for the five, is given as $C_5=\frac{2.554}{3.509} = 73\%$.  Alternatively, six was suggested by properties where confidence is $C_6=\frac{0.955}{3.509}=27\%$.  Five wins because confidence of six is less than the confidence of a five,  $27\% < 73\%$.  We also observe that the explainability, $X_x$, columns provide rationale for each of the classes that were selected based on the selecting properties.   E.g.,  the logic in the XAI block references property information from explainability column $X_5$ and assembles rationale indicating that the five was selected because the stroke, endpoint, and line properties are consistent with a five. 
 
  \begin{figure}[htbp]
 \centerline{\includegraphics[width=15mm]{./digit-images/9-9.png}}
@@ -342,7 +341,7 @@ The second example handwritten digit,  labeled a nine, is shown in Fig.~\ref{exa
 \cline{3-6}
 \multicolumn{2}{c}{} & \multicolumn{2}{|c|}{Effectiveness} & \multicolumn{2}{c|}{Explainability} \\
 \hline
- Prop. & Vote & $E_{\pi,2}$ & $E_{\pi,3}$ & $X_2$ & $X_3$ \\
+ Prop. & Vote & $E_{i,2}$ & $E_{i,3}$ & $X_2$ & $X_3$ \\
 \hline \cline{0-5}
 $P_1$ & 2 & 1.000 & - & \checkmark & - \\ 
 \hline
@@ -403,7 +402,17 @@ The third example handwritten digit, labeled a two, is shown in Fig. ~\ref{examp
 \label{table:nnavoter}
 \end{table}
 
-Table~\ref{table:nnavoter} shows the results of the ML Voting scheme on the three examples.  The ten rows in the table represent the corresponding digits.  The columns for examples 1 through 3 contain the values output by the voter NNA when presented with the property votes from the examples.  We observe that in each example the ML Voter overwhelmingly selects the appropriate digit shown in bold.
+Table~\ref{table:nnavoter} shows the output of the ML voting scheme on the three examples.  The ten rows in the table represent the corresponding digits.  The columns for examples 1 through 3 contain the values output by the voter NNA when presented with the property votes from the examples.  We observe that in each example the ML Voter overwhelmingly selects the appropriate digit shown in bold.
+
+\section{Results}
+
+We introduce two metrics to compare aggregate results from the two voting schemes.  The first metric is Identification Accuracy which gauges the correctness of the system in performing classification.  Identification Accuracy is the ratio of the number of correct classifications to the total number of classifications of the voter model engine.  The second metric, Explainability Quality, is used to estimate the correspondence or connection of explanations with classification decisions.  Explainability Quality is the ratio of classifications decisions with at least one property justifying the classification by the voter scheme to the total number of classifications.   In both metrics, values close to one are desired.
+
+Results for Identification Accuracy obtained using the probabilistic voting scheme on the MNIST dataset were $0.919$ while results obtained from the NNA voting scheme were $0.959$.  Results for Explainability Quality using the probabilistic voter scheme were $1.00$ while results for the NNA voting scheme were $0.982$.
+
+The ML voter scheme was more accurate in classifying input than the probabilistic scheme by about 4\%.   However, the probabilistic voter scheme was nearly 2\% better in terms of Explainability Quality over the ML voting scheme.  Note that in the probabilistic scheme, the voter model engine selects a class from among the property votes, so there is always a property that corresponds to the voter output.  The NNA in the ML voting scheme is trained based on labels on the training set which may not correspond to a vote from a property in a small percentage of inputs.
+
+It appears there can be cases where identification accuracy and explanation quality may not be well balanced.  The particulars of the application will need to be considered.  It is our view that, in some applications, the quality of explainability may have greater importance than identification accuracy.
 
 \begin{table*}[htbp]
 \caption{Probabilistic voting and explainability for Example 2}
@@ -412,7 +421,7 @@ Table~\ref{table:nnavoter} shows the results of the ML Voting scheme on the thre
 \cline{3-10}
 \multicolumn{2}{c}{} & \multicolumn{4}{|c|}{Effectiveness} & \multicolumn{4}{c|}{Explainability} \\
 \hline
- Prop. & Vote & $E_{\pi,3}$ & $E_{\pi,5}$ & $E_{\pi,6}$ & $E_{\pi,9}$ & $X_3$ & $X_5$ & $X_6$ & $X_9$ \\
+ Prop. & Vote & $E_{i,3}$ & $E_{i,5}$ & $E_{i,6}$ & $E_{i,9}$ & $X_3$ & $X_5$ & $X_6$ & $X_9$ \\
 \hline \cline{0-9}
 $P_1$ & 9 & - & - & - & 1.00 & - & - & - & \checkmark \\ 
 \hline
