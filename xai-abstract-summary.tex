@@ -56,7 +56,7 @@ sensitivity-based analysis, feature importance, fuzzy-based, neural-network, and
 
 Distributed and fault tolerant systems research has provided several examples of voting \cite{avizienis} and probabilistic models for the voting problem \cite{blough}.
 
-\section{Summary}
+\section{Overview}
 
  \begin{figure}[htbp]
 \centerline{\includegraphics[width=95mm]{./images/voting_prop_nn_2.png}}
@@ -64,19 +64,19 @@ Distributed and fault tolerant systems research has provided several examples of
 \label{voting}
 \end{figure}
 
-Our methodology for explainability is summarized as the use of explainable properties and related transformations of the input to make distinct classification decisions for each property.  Those distinct classifications are input to a voter to provide the best classification result.  Rationale, based on the explainable properties, are combined with the voter result to provide an explanation. 
+The methodology for explainability is based upon the use of explainable properties and related transformations of the input to make distinct classification decisions for each property.  Those distinct classifications are input to a voter to provide the best classification result.  Rationale, based on the explainable properties, are combined with the voter result to provide an explanation. 
 
-The explainable architecture used in this work is depicted in Fig.~\ref{voting}.  The architecture consists of Properties, a Voter Model Engine, and an Explainable Artificial Intelligence block.  $I_i$ represents the $i$th input. 
+The explainable architecture used in this work is depicted in Fig.~\ref{voting}.  The architecture consists of Properties, a Voter Model Engine, and an Explainable Artificial Intelligence block.  $I_i$ represents the $i$th input to the architecture.
 
-Explainable properties are the basis of this work and are defined as descriptive qualities of a sample input that mean something to a user in the problem domain, especially to justify a classification decision.   Explainable properties $1$ through $n$ are outlined in the blue rectangle in Fig.~\ref{voting}.  Each explainable property is identified with a $P_x$ square representing logic for classifications based on the particular property.   $Q_i$ represents the $i$th property's classification output.
+Explainable properties are defined as descriptive qualities of a sample input that mean something to a user in the problem domain, especially to justify a classification decision.   Explainable properties $1$ through $n$ are outlined in the blue rectangle in Fig.~\ref{voting}.  Each explainable property is identified with a $P_x$ square representing logic for classifications based on the particular property.   $Q_i$ represents the $i$th property's classification output.
 
 The Voter Model Engine relies on input classifications, $Q_i$, from the explainable properties and feedback from the XAI block to make a final classification decision.   This work explores two voting model schemes.  One voting scheme is probabilistic while the second involves an ML algorithm. 
 
-The first voting scheme we present is probabilistic.  In this scheme, we use the knowledgebase to identify each explainable property transformation's effectiveness to correctly predict a class.   The effectiveness for an explainable property transformation, $i$, to select a particular class, $x$,  is given by $E_{i,x}$ which is equal to the ratio of the number of correct classifications of explainable property transformation $i$ of the class $x$ to the total number of elements of class $x$.   We take the sum of effectiveness metrics, for the properties that select a class, $x$, to obtain a weight, $W_x$, for that class.  The confidence for the class $x$ is given by $C_x=\frac{W_x}{\sum\limits_jW_j}$.  The denominator is the sum of all weights for classes that were selected.  If multiple classes are selected by the properties, the class with the highest confidence is will be chosen by the voter.
+The first voting scheme we present is probabilistic.  In this scheme, we use a knowledgebase to identify each explainable property transformation's effectiveness to correctly predict a class.   The effectiveness for an explainable property transformation, $i$, to select a particular class, $x$,  is given by $E_{i,x}$ which is equal to the ratio of the number of correct classifications of explainable property transformation $i$ of the class $x$ to the total number of elements of class $x$.   We take the sum of effectiveness metrics, for the properties that select a class, $x$, to obtain a weight, $W_x$, for that class.  The confidence for the class $x$ is given by $C_x=\frac{W_x}{\sum\limits_jW_j}$.  The denominator is the sum of all weights for classes that were selected.  If multiple classes are selected by the properties, the class with the highest confidence is will be chosen by the voter.
 
 The second classification scheme utilizes the explainable property transformation classification outputs and labels from the training set to train a NNA in the voter model engine.  The NNA is used to perform the final classification from the explainable property transformation outputs. 
 
-The XAI block consists of a knowledgebase and logic to process inputs from explainable property classifications and the Voter Model Engine.   The purpose of the XAI block is to generate an explanation for the user and provide feedback to inform the Voter Model Engine.  The XAI knowledgebase contains information on explainable properties,  a store of training results, and metrics related to the effectiveness of properties.  The explanation provided by the XAI block consists of rationale, related to the explainable properties, that contributed to the classification decision as well as confidence. 
+The XAI block consists of a knowledgebase and logic to process inputs from explainable property classifications and the Voter Model Engine.   The purpose of the XAI block is to generate an explanation for the user and provide feedback to inform the Voter Model Engine.  The XAI knowledgebase contains information on explainable properties,  a store of training results, and metrics related to the effectiveness of properties.  The explanation provided by the XAI block consists of rationale, related to the explainable properties that contributed to the classification decision, as well as confidence. 
 
  \begin{figure}[htbp]
 \centerline{\includegraphics[width=90mm]{./images/property_transforms.png}}
@@ -109,7 +109,7 @@ Data transformations are next defined and implemented to represent a sample for 
 We next generate a transformed training dataset by submitting all elements from the original training set to the property transformations.  The output from each property transformation is stored separately for training each property transform specific NNA. 
 
 \subsubsection{Produce Trained Property NNAs}
-The next step involves initializing unique NNAs representing each property and then using supervised ML techniques to train the NNAs using only the output of that particular property transform and the original labels.  This results in trained NNAs for each explainable property transform.
+The next step involves initializing unique NNAs representing each property transformation and then using supervised ML techniques to train the NNAs using only the output of that particular property transform and the original labels.  This results in trained NNAs for each explainable property transform.
 
 \subsubsection{Build an XAI Knowledgebase}
 After training, we again process the training set and populate the XAI knowledgebase.  The knowledgebase stores information on properties, the original training label, and each property's classification results from the property NNA.  Metrics on the effectiveness of each explainable property for classes are also stored in the knowledgebase.  The knowledgebase is used in constructing and providing feedback in the voting strategy as well as for composing the classification rationale in the XAI block.
@@ -160,7 +160,7 @@ $P_9$ & Enclosed Region & Skeleton Flood Fill & \raisebox{-.5\height}{\includegr
 \end{figure}
 \egroup
 
-The Stroke property is meant to represent the minimal path of the writing implement to trace the digit.  The morphological skeleton,  transformation $T_1$, is a one pixel connected representation preserving the topology of the digit and providing a representation of the stroke.  We utilized the Lee\cite{Lee1994} algorithm for obtaining skeletons of the MNIST handwritten digits.
+The Stroke property is meant to represent the minimal path of the writing implement to trace the digit.  The morphological skeleton,  transformation $T_1$, is a one pixel connected representation preserving the rough endpoints of the digit and providing a representation of the stroke.  We utilized the Lee\cite{Lee1994} algorithm for obtaining skeletons of the MNIST handwritten digits.
 
 $P_2, P_4,$ and $P_5$ are the circle property with corresponding transforms $T_2$ the Hough Circle, $T_4$ the Hough Ellipse and $T_5$ accounting for multiple non-overlapping circles and ellipses in the transform.
 
