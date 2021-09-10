@@ -92,25 +92,25 @@ Our methodology for achieving explainable ML classification involves the followi
 %\end{itemize}
 
 \subsubsection{Discover Explainable Properties}
-An explainable property is an attribute of a sample in the problem domain that may differentiate classes and provide a rationale for classification.  This step may require manual analysis of sample inputs to identify properties.
+An explainable property is an attribute of a sample in the problem domain that may differentiate classes and provide a rationale for classification.  This step may require manual analysis of sample inputs to identify explainable properties.
 
 \subsubsection{Define and Implement Transformations}
 Data transformations are next defined and implemented to highlight explainable properties in the input.  Transforms may be known algorithms of feature detection and extraction that relate to explainable properties.  In the MNIST example, we used digital image processing techniques such as the morphological skeleton, Hough Circle \& Line Transforms, and flood fill.
 
 \subsubsection{Transform Training Data} 
-We next generate a transformed training dataset by submitting all elements from the original training set to the property transformations.  The output from each property transformation is stored for training each property transform specific NNA. 
+We next generate a transformed training dataset by submitting all elements from the training set to the property transformations.  The output from each property transformation is stored for training each property transform specific NNA. 
 
 \subsubsection{Produce Trained Property NNAs}
-The next step involves initializing unique NNAs representing each property transformation and then using supervised ML techniques to train the NNAs using only the output of that particular property transform and the original labels.  This results in trained NNAs for each explainable property transform.
+The next step involves initializing unique NNAs representing each property transformation.  Using supervised ML techniques, the NNAs are trained from the data stored from the previous step and the original input labels.  This results in trained NNAs that produce classifications each explainable property transform.
 
 \subsubsection{Build an XAI Knowledgebase}
 After training, we again process the training set and populate the XAI knowledgebase with the property classification results.  The knowledgebase stores information on properties, the original training label, and each property's classification result.  Metrics on the effectiveness of each explainable property for classes are also calculated and stored in the knowledgebase.  The knowledgebase is used in providing feedback to the voter as well as for composing the classification rationale.
 
 \subsubsection{Devise a Voting Scheme}
-We next devise a voting strategy in the Voter Model Engine.  Voting is based on information from the knowledgebase.  The purpose for the voting scheme is to select among the potentially conflicting votes from the explainable property transformation classifications.
+We next devise a voting strategy in the Voter Model Engine.  Voting decisions are based on information from the knowledgebase and explainable property classifications.  The purpose for the voting scheme is to select among the potentially conflicting votes from the explainable property transformation classifications.
 
 \subsubsection{Provide User Feedback}
-Finally, when test data is presented to the architecture, we evaluate the results and determine if they are sufficient or if more explainable properties or transforms are needed.
+Finally, when test data is presented to the architecture, we evaluate the results and determine if they are sufficient.  The performance of the explainable property transforms for particular classes are examined for effectiveness.  Where there are gaps, new properties are identified for classes with poor results.  Ineffective properties or transforms may also be eliminated.
 
 \section{Approach}
 
@@ -118,7 +118,7 @@ This section presents the approach of applying the methodology to the MNIST hand
 
 \subsection{1 and 2 Properties and Transformations}
 
-We identified explainable properties related to shapes and characteristics of the digits in MNIST.  Fig.~\ref{transsample} depicts the explainable properties and corresponding transformations to identify those properties.  The figure also shows example MNIST digits, $I_i$, and their resulting transforms, $T_i$.
+We identified explainable properties related to shapes and characteristics of the digits in MNIST.  Digital image processing techniques that relate to and highlight the explainable properties were used as transforms.  Fig.~\ref{transsample} depicts the explainable properties and corresponding transformations.  The figure also shows example MNIST digits, $I_i$, and their resulting transformed images, $T_i$.
 
 \bgroup
 \renewcommand{\arraystretch}{1.8}
@@ -154,8 +154,8 @@ $P_9$ & Enclosed Region & Skeleton Flood Fill & \raisebox{-.5\height}{\includegr
 \end{figure}
 \egroup
 
-The Stroke property is meant to represent the minimal path of the writing implement to trace the digit.  The morphological skeleton transformation is a one pixel connected representation of the digit, providing a representation of the stroke.  We utilized the Lee\cite{Lee1994} algorithm for obtaining the skeleton.
-$P_2$, $P_4$, and $P_5$ are the circle property with corresponding transforms $T_2$, $T_4$, and $T_5$ representing the Hough Circle, the Hough Ellipse, and multiple non-overlapping circles and ellipse transforms respectively.
+The Stroke property is meant to represent the minimal path of the writing implement to trace the digit.  The morphological skeleton transformation is a one pixel connected representation of the digit,  representing the stroke.  We utilized the Lee\cite{Lee1994} algorithm for the skeleton.
+$P_2$, $P_4$, and $P_5$ are the circle property with corresponding transforms $T_2$, $T_4$, and $T_5$ representing the Hough Circle, the Hough Ellipse, and multiple non-overlapping circles and ellipse transforms.
 $P_3$ and $T_3$ are the crossings property and transform representing the intersection of line segments in a digit.  $T_3$ involves taking the skeleton and then finding activated pixels with more than two neighbors.   The endpoints property and transform, $P_6$ and $T_6$, involved taking activated pixels in the skeleton with only one neighbor.
 Property $P_7$ and $P_9$ for enclosed regions used transform $T_7$ which involved a flood fill and $T_9$ the flood fill of the skeleton.  The line property and transform, $P_8$ and $T_8$, uses an algorithm to find the non-overlapping Hough Lines of a digit.
 
@@ -187,35 +187,21 @@ C_x=\frac{W_x}{\sum\limits_jW_j}
 
 The denominator is the sum of all weights for classes that were selected by a property.  If multiple classes are selected by the properties, the class with the highest confidence will be chosen by the voter.
 
-The second voting scheme was NN based.  We utilized explainable property transformation output and labels from MNIST to train a NN in the voter model engine.
+The second voting scheme was NN based.  We utilized explainable property transformation output and labels from MNIST, stored in the database, to train a NN in the voter model engine.
 
 \subsection{7 Feedback}
 
-When evaluating early results, there was particular difficulty with the circle transforms for some digits.  The ellipse proved better in generally matching handwritten loop like features.  The single circle transforms worked well for detecting digits zero, six, and nine but performed rather poorly for eight.  Adding a transform that used multiple non-overlapping circles or ellipses was an improvement for eight.  We experimented with the inflection points property and corner detection transforms but the classification results were poor for all digit classes so they were dropped.
+When evaluating early results, there was particular difficulty with the circle transforms for some digits.   The single circle transforms worked well for detecting digits six and nine but performed rather poorly for eight and zero.  The ellipse proved better in extracting handwritten loop-like characteristics of digits for zero.   Adding a transform that used multiple non-overlapping circles or ellipses was also an improvement for eight.  We experimented with the inflection point property and corner detection transforms but the classification results were poor for all digit classes so the property was eliminated.
 
 \section{Examples}
 
-Detailed examples from MNIST follow in this section by first providing property aggregate classification results for the digits five and six and then explainable results from three different input images will be presented.
+Detailed examples from MNIST follow in this section by first providing aggregate property classification results for the digits five and six and then explainable results from three different input images will be presented.
 
-Tables ~\ref{table:digit5out} and ~\ref{table:digit6out} show the property transformation NNA output and statistics for properties for digits five and six.  The tables represent the results from processing all of the digits labeled five and six.  The first row of the tables represents effectiveness, $E_{i,x}$.  The second, third and fourth rows represent the standard deviation, kurtosis, and skew of the digit outputs for each property, respectively.  The numbered rows in the tables represent the means of the property outputs for each digit.  The last two rows are the false positive and false negative rates.
+Tables ~\ref{table:digit5out} and ~\ref{table:digit6out} show the property transformation NNA output and statistics for properties for digits five and six.  The tables represent the results from reprocessing all of the digits labeled five and six.  The first row of the tables represents effectiveness, $E_{i,x}$, where $i$ is the property transform and $x$ is the digit(class).  The second, third and fourth rows represent the standard deviation, kurtosis, and skew of the digit outputs for each property.  The numbered rows in the tables represent the means of the property outputs for each digit.  The last two rows are the false positive and false negative rates.
 
-We observe that the Stroke property, $P_0$, performed very well in both digits.  The next highest performing property in both tables was the endpoint property, $P_5$, with 85.4\% and 93.3\% accuracy.  The digit six also had good classification results for the enclosed region properties, $P_7$ and $P_9$, due to enclosed regions in the digit six.  The digit six also performed better than the five in the properties related to the circle, $P_2$, $P_4$, and $P_5$.
+We observe that the Stroke property, $P_0$, performed very well in both digits.  The next highest performing property in both tables was the endpoint property, $P_5$, with 85.4\% and 93.3\% accuracy.  The digit six also had good classification results for the enclosed region properties, $P_7$ and $P_9$.  The digit six also performed better than the five in the properties related to the circle property, $P_2$, $P_4$, and $P_5$.  The digit five had among the poorest performance as observed from the relatively low percent correct and high false negative rates.
 
-The digit five had among the poorest performance as observed in the relatively low percent correct and high false negative rates in Table. ~\ref{table:digit5out}.
-
-The mean digit values from the Property NNAs are also represented  in Fig.~\ref{digit5votes} and ~\ref{digit6votes} as three dimensional surface plots for digits five and  and six.
-
-\begin{figure}[htbp]
-\centerline{\includegraphics[width=70mm]{./images/digit-5.png}}
-\caption{Mean property NNA output for the digit 5}
-\label{digit5votes}
-\end{figure}
-
-\begin{figure}[htbp]
-\centerline{\includegraphics[width=70mm]{./images/digit-6.png}}
-\caption{Mean property NNA output for the digit 6}
-\label{digit6votes}
-\end{figure}
+Mean digit values from the Property NNAs are also represented  in Fig.~\ref{digit5votes} and ~\ref{digit6votes} as three dimensional surface plots for digits five and  and six.
 
 %\begin{table}[htbp]
 %\caption{Properties, Transforms and Property Identifiers}
@@ -443,9 +429,23 @@ The ML voter scheme was more accurate in classifying input than the probabilisti
 
 It appears there can be cases where identification accuracy and explanation quality may not be well balanced.  The particulars of the application will need to be considered.  It is our view that, in some applications, the quality of explainability may have greater importance than identification accuracy.
 
-\begin{table*}[htbp]
+\begin{figure}[htbp]
+\begin{minipage}{0.48\textwidth}
+\centerline{\includegraphics[width=75mm]{./images/digit-5.png}}
+\caption{Mean property NNA output for the digit 5}
+\label{digit5votes}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+\centerline{\includegraphics[width=75mm]{./images/digit-6.png}}
+\caption{Mean property NNA output for the digit 6}
+\label{digit6votes}
+\end{minipage}
+\end{figure}
+
+\begin{table}[htbp]
 \caption{Probabilistic voting and explainability for Example 2}
 \centering
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{| c | c | c | c | c | c | c | c | c | c |}
 \cline{3-10}
 \multicolumn{2}{c}{} & \multicolumn{4}{|c|}{Effectiveness} & \multicolumn{4}{c|}{Explainability} \\
@@ -474,9 +474,10 @@ $P_9$ & 9 & - & - & - & 0.821 & - & - & - & \checkmark \\
 \cline{0-9}
 \multicolumn{2}{|c|}{Confidence} & $8\%$ & $1\%$ & $24\%$ & $67\%$ & \multicolumn{4}{c}{} \\
 \cline{0-5}
-\end{tabular}
+\end{tabular}%
+}
 \label{table:example2}
-\end{table*}
+\end{table}
 
 \begin{table*}
 \caption{Digit 5 Outputs}
