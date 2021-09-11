@@ -197,9 +197,9 @@ When evaluating early results, there was particular difficulty with the circle t
 
 Detailed examples from MNIST follow in this section by first providing aggregate property classification results for the digits five and six and then explainable results from three different input images will be presented.
 
-Tables ~\ref{table:digit5out} and ~\ref{table:digit6out} show the property transformation NNA output and statistics for properties for digits five and six.  The tables represent the results from reprocessing all of the digits labeled five and six.  The first row of the tables represents effectiveness, $E_{i,x}$, where $i$ is the property transform and $x$ is the digit(class).  The second, third and fourth rows represent the standard deviation, kurtosis, and skew of the digit outputs for each property.  The numbered rows in the tables represent the means of the property outputs for each digit.  The last two rows are the false positive and false negative rates.
+Tables ~\ref{table:digit5out} and ~\ref{table:digit6out} show the property transformation NNA output and statistics for properties for digits five and six.  The tables represent the results from reprocessing all of the training digits labeled five and six.  Columns two through ten of the tables represent the property transformations from Fig.~\ref{transsample}.  The first row of the tables represents effectiveness, $E_{i,x}$, where $i$ is the property transform and $x$ is the digit(class).  The second, third and fourth rows represent the standard deviation, kurtosis, and skew of the digit outputs for each property.  The numbered rows in the tables represent the means of the property outputs for each digit.  The last two rows are the false positive and false negative rates.
 
-We observe that the Stroke property, $P_0$, performed very well in both digits.  The next highest performing property in both tables was the endpoint property, $P_5$, with 85.4\% and 93.3\% accuracy.  The digit six also had good classification results for the enclosed region properties, $P_7$ and $P_9$.  The digit six also performed better than the five in the properties related to the circle property, $P_2$, $P_4$, and $P_5$.  The digit five had among the poorest performance as observed from the relatively low percent correct and high false negative rates.
+We observe that the Stroke property, $P_0$, performed very well in both digits.  The next highest performing property in both tables was the endpoint property, $P_5$, with 85.4\% and 93.3\% accuracy.  The digit six also had good classification results for the enclosed region properties, $P_7$ and $P_9$.  The digit six also performed better than the five in the properties related to the circle, $P_2$, $P_4$, and $P_5$.  The digit five had among the poorest performance as observed from the relatively low percent correct and high false negative rates.
 
 Mean digit values from the Property NNAs are also represented  in Fig.~\ref{digit5votes} and ~\ref{digit6votes} as three dimensional surface plots for digits five and  and six.
 
@@ -238,7 +238,7 @@ Mean digit values from the Property NNAs are also represented  in Fig.~\ref{digi
 \label{example1}
 \end{figure}
 
-We next present three interesting MNIST digits and review the property classifications, property effectiveness, and explainability.  Stepping through the procedures of the probabilistic voting scheme, we show the classification results for the digits as well as the explainability rationale from XAI as well as the confidence.
+We next present three interesting MNIST digits and review the property classifications, property effectiveness,  confidence, and explainability.  Stepping through the procedures of the probabilistic voting scheme, we show the classification results for the digits as well as the explainability rationale from XAI.
 
 \begin{table}[htbp]
 \caption{Probabilistic voting and explainability for Example 1}
@@ -275,7 +275,7 @@ $P_9$ & - & - & - & - & - \\
 \label{table:example1}
 \end{table}
 
-The first example  digit, labeled a five, is shown in Fig.~\ref{example1}.  Voting and explainability is detailed in Table ~\ref{table:example1}.  The property votes for this example are shown in the Vote column.  Cells with dashes are properties that did not have a sufficiently strong opinion on a particular digit, i.e., no class was above a threshold.   The $E_{i,x}$ columns give the effectiveness of a property $i$ to correctly select class $x$.  The effectiveness values are from the knowledgebase using eq. (\ref{effectiveness}).   The stroke $(P_1)$, endpoint $(P_6)$ and line $(P_8)$ properties suggest the digit is a five with effectiveness $E_{1,5}= 1.000$, $E_{6,5}=0.854$, and $E_{8,5}=0.700$.  Weight of effectiveness for the digit five is $W_5=2.554$, given by eq. (\ref{weight}).  The circle $(P_2)$ and $(P_5)$ properties suggest that the digit is a six with effectiveness $E_{2,6}=0.465$ and $E_{5,6}=0.490$  and a weight of $W_6=0.955$.  Taking the sum of the total weights, $\sum\limits_\gamma W_\gamma=3.509$.  Confidence, as given by eq. (\ref{conf}), for the five, is given as $C_5=\frac{2.554}{3.509} = 73\%$.  Alternatively, six was suggested by properties where confidence is $C_6=\frac{0.955}{3.509}=27\%$.  Five wins because $C_6=27\% < 73\%=C_5$.  We also observe that the explainability, $X_x$, columns provide rationale for each of the classes that were selected based on the selecting properties.   E.g.,  the logic in the XAI block references property information from explainability column $X_5$ and assembles rationale indicating that the five was selected because the stroke, endpoint, and line properties are consistent with a five. 
+The first example digit, labeled a five, is shown in Fig.~\ref{example1}.  Voting and explainability is detailed in Table ~\ref{table:example1}.  The property votes for this example are shown in the Vote column.  Cells with dashes are properties that did not have a sufficiently strong opinion on a particular digit, i.e., no class was above a threshold.   The $E_{i,x}$ columns give the effectiveness of a property $i$ to correctly select class $x$.  The effectiveness values are from the knowledgebase using eq. (\ref{effectiveness}).   The stroke $(P_1)$, endpoint $(P_6)$ and line $(P_8)$ properties suggest the digit is a five with effectiveness $E_{1,5}= 1.000$, $E_{6,5}=0.854$, and $E_{8,5}=0.700$.  Weight of effectiveness for the digit five is $W_5=2.554$, given by eq. (\ref{weight}).  The circle $(P_2)$ and $(P_5)$ properties suggest that the digit is a six with effectiveness $E_{2,6}=0.465$ and $E_{5,6}=0.490$  and a weight of $W_6=0.955$.  Taking the sum of the total weights, $\sum\limits_\gamma W_\gamma=3.509$.  Confidence, as given by eq. (\ref{conf}), for the five, is given as $C_5=\frac{2.554}{3.509} = 73\%$.  Alternatively, six was suggested by properties where confidence is $C_6=\frac{0.955}{3.509}=27\%$.  Five wins because $C_6=27\% < 73\%=C_5$.  We also observe that the explainability, $X_x$, columns provide rationale for each of the classes that were selected based on the selecting properties.   E.g.,  the logic in the XAI block references property information from explainability column $X_5$ and assembles rationale indicating that the five was selected because the stroke, endpoint, and line properties are consistent with a five. 
 
  \begin{figure}[htbp]
 \centerline{\includegraphics[width=15mm]{./digit-images/9-9.png}}
@@ -313,6 +313,43 @@ The first example  digit, labeled a five, is shown in Fig.~\ref{example1}.  Voti
 %\end{table}
 
 The second example,  labeled a nine, is shown in Fig.~\ref{example2}.  Table ~\ref{table:example2} shows the property predictions, voting results, and rationale for example 3.  In this example three properties selected the digit nine and three other properties selected the digits three, five, and six.  The results from the voter for this example were that nine was selected by the voter with a $67\%$ confidence and an explanation that the stroke and enclosed region properties were consistent with those of a nine.  We noted on this example that it is surprising that none of the properties indicated an eight because of the example's similarity to a digit eight.  
+
+\begin{table}[htbp]
+\caption{Probabilistic voting and explainability for Example 2}
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{| c | c | c | c | c | c | c | c | c | c |}
+\cline{3-10}
+\multicolumn{2}{c}{} & \multicolumn{4}{|c|}{Effectiveness} & \multicolumn{4}{c|}{Explainability} \\
+\hline
+ Prop. & Vote & $E_{i,3}$ & $E_{i,5}$ & $E_{i,6}$ & $E_{i,9}$ & $X_3$ & $X_5$ & $X_6$ & $X_9$ \\
+\hline \cline{0-9}
+$P_1$ & 9 & - & - & - & 1.00 & - & - & - & \checkmark \\ 
+\hline
+$P_2$ & 3 & 0.327 & - & - & - & \checkmark & - & - & - \\
+\hline
+$P_3$ & 5 & - &  0.057 & - & - & - & \checkmark & - & - \\
+\hline
+$P_4$ & - & - & - & - & - & - & - & - & - \\
+\hline
+$P_5$ & - & - & - & - & - & - & - & - & - \\
+\hline
+$P_6$ & 6 & - & - & 0.933 & - & - & - & \checkmark & - \\
+\hline
+$P_7$ & 9 & - & - & - & 0.809 & - & - & - & \checkmark \\
+\hline
+$P_8$ & - & - & - & - & - & - & - & - & - \\
+\hline
+$P_9$ & 9 & - & - & - & 0.821 & - & - & - & \checkmark \\
+\hline \cline{0-9}
+\multicolumn{2}{|c|}{Weight} & 0.327 & 0.057 & 0.933 & 2.630 & \multicolumn{4}{c|}{$\sum W_\gamma=3.946$} \\
+\cline{0-9}
+\multicolumn{2}{|c|}{Confidence} & $8\%$ & $1\%$ & $24\%$ & $67\%$ & \multicolumn{4}{c}{} \\
+\cline{0-5}
+\end{tabular}%
+}
+\label{table:example2}
+\end{table}
 
  \begin{figure}[htbp]
 \centerline{\includegraphics[width=15mm]{./digit-images/2-4.png}}
@@ -431,53 +468,16 @@ It appears there can be cases where identification accuracy and explanation qual
 
 \begin{figure}[htbp]
 \begin{minipage}{0.48\textwidth}
-\centerline{\includegraphics[width=75mm]{./images/digit-5.png}}
+\centerline{\includegraphics[width=80mm]{./images/digit-5.png}}
 \caption{Mean property NNA output for the digit 5}
 \label{digit5votes}
 \end{minipage}\hfill
 \begin{minipage}{0.48\textwidth}
-\centerline{\includegraphics[width=75mm]{./images/digit-6.png}}
+\centerline{\includegraphics[width=80mm]{./images/digit-6.png}}
 \caption{Mean property NNA output for the digit 6}
 \label{digit6votes}
 \end{minipage}
 \end{figure}
-
-\begin{table}[htbp]
-\caption{Probabilistic voting and explainability for Example 2}
-\centering
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{| c | c | c | c | c | c | c | c | c | c |}
-\cline{3-10}
-\multicolumn{2}{c}{} & \multicolumn{4}{|c|}{Effectiveness} & \multicolumn{4}{c|}{Explainability} \\
-\hline
- Prop. & Vote & $E_{i,3}$ & $E_{i,5}$ & $E_{i,6}$ & $E_{i,9}$ & $X_3$ & $X_5$ & $X_6$ & $X_9$ \\
-\hline \cline{0-9}
-$P_1$ & 9 & - & - & - & 1.00 & - & - & - & \checkmark \\ 
-\hline
-$P_2$ & 3 & 0.327 & - & - & - & \checkmark & - & - & - \\
-\hline
-$P_3$ & 5 & - &  0.057 & - & - & - & \checkmark & - & - \\
-\hline
-$P_4$ & - & - & - & - & - & - & - & - & - \\
-\hline
-$P_5$ & - & - & - & - & - & - & - & - & - \\
-\hline
-$P_6$ & 6 & - & - & 0.933 & - & - & - & \checkmark & - \\
-\hline
-$P_7$ & 9 & - & - & - & 0.809 & - & - & - & \checkmark \\
-\hline
-$P_8$ & - & - & - & - & - & - & - & - & - \\
-\hline
-$P_9$ & 9 & - & - & - & 0.821 & - & - & - & \checkmark \\
-\hline \cline{0-9}
-\multicolumn{2}{|c|}{Weight} & 0.327 & 0.057 & 0.933 & 2.630 & \multicolumn{4}{c|}{$\sum W_\gamma=3.946$} \\
-\cline{0-9}
-\multicolumn{2}{|c|}{Confidence} & $8\%$ & $1\%$ & $24\%$ & $67\%$ & \multicolumn{4}{c}{} \\
-\cline{0-5}
-\end{tabular}%
-}
-\label{table:example2}
-\end{table}
 
 \begin{table*}
 \caption{Digit 5 Outputs}
