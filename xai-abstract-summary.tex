@@ -120,11 +120,11 @@ Finally, when test data is presented to the architecture, we evaluate the result
 
 This section presents the approach of applying the methodology to the MNIST handwritten digit database. 
 
-\subsection{1 Explainable Properties}
+\subsection{Explainable Properties}
 
 Through manual review of samples in MNIST, we identified explainable properties related to shapes and characteristics of the digits.  The explainable properties we identified and utilized are listed in the Property column of Fig.~\ref{transsample}.
 
-\subsection{2 Transformations}
+\subsection{Transformations}
  
 Digital image processing techniques that relate to and highlight the explainable properties were used as transforms.  The Transform column in Fig.~\ref{transsample} lists transformations for the various properties.  The figure also shows example MNIST digits, $I_i$, and their resulting transformed images, $T_i$.
 
@@ -169,19 +169,19 @@ $P_2$, $P_4$, and $P_5$ are the circle property with corresponding transforms $T
 $P_3$ and $T_3$ are the crossings property and transform representing the intersection of line segments in a digit.  $T_3$ involves taking the skeleton and then finding activated pixels with more than two neighbors.   The endpoints property and transform, $P_6$ and $T_6$, involved taking activated pixels in the skeleton with only one neighbor.
 Property $P_7$ and $P_9$ for enclosed regions used transform $T_7$ which involved a flood fill and $T_9$ the flood fill of the skeleton.  The line property and transform, $P_8$ and $T_8$, uses an algorithm to find the non-overlapping Hough Lines of a digit.
 
-\subsection{3 Transforming Training Data}
+\subsection{Transforming Training Data}
 
-The various transforms were applied to the MNIST data using implementations in the Python scikit-image library.  The resulting transformed images were stored in MNIST IDX files for each property transform.
+The various transforms were applied to the MNIST data using implementations in the Python scikit-image\ref{scikit-image} library version 0.17.2.  The resulting transformed images were stored in MNIST IDX files for each property transform.
 
-\subsection{4 Training}
+\subsection{Training}
 
-The trained NNAs were implemented using the Python scikit-learn Multi-Layer Perceptrons.  The transformed data stored in the MNIST IDX files for each property transform were used to train the NNAs.
+The trained NNAs were implemented using the Python scikit-learn\ref{scikit-learn} version 0.23.2 Multi-Layer Perceptrons.  The transformed data stored in the MNIST IDX files for each property transform were used to train the NNAs.
 
-\subsection{5 Knowledgebase}
+\subsection{Knowledgebase}
 
 After training the NNAs,  the transformed training data was presented to the NNAs and results were stored in a data structure that was serialized as JSON.  The JSON could be loaded to in-memory maps for performing metric calculation and efficient runtime access.  Textual property labels and descriptions were also stored in the knowledgebase for composing explainable rationale for classification.
 
-\subsection{6 Voting Schemes}
+\subsection{Voting Schemes}
 \label{subsection:Voting}
 
 The first voting scheme we present is probabilistic.  In this scheme, we use the knowledgebase to identify each explainable property transformation's effectiveness to correctly predict a digit.   The effectiveness for an explainable property transformation, $i$, to select a particular digit, $x$,  is given by:
@@ -198,7 +198,7 @@ C_x=\frac{W_x}{\sum\limits_jW_j}
 \end{equation}
 The denominator is the sum of all weights for classes that were selected by a property.  If multiple digits are selected by the properties, the digit with the highest confidence will be chosen by the VME.
 
-The second voting scheme was NN based.  We utilized explainable property transformation output and labels from MNIST, stored in the database, to train a Milti-Layer Perceptron model in the NN VME.
+The second voting scheme was NN based.  We utilized explainable property transformation output and labels from MNIST, stored in the database, to train a Multi-Layer Perceptron model in the NN VME.
 
 \subsection{ User Feedback}
 
