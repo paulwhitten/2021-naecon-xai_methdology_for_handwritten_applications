@@ -184,17 +184,17 @@ After training the NNAs,  the transformed training data was presented to the NNA
 \subsection{Voting Schemes}
 \label{subsection:Voting}
 
-The first voting scheme we present is probabilistic.  In this scheme, we use the knowledgebase to identify each explainable property transformation's effectiveness to correctly predict a digit.   The effectiveness for an explainable property transformation, $i$, to select a particular digit, $x$,  is given by:
+The first voting scheme we present is probabilistic.  In this scheme, we use the knowledgebase to identify each explainable property transformation's effectiveness to correctly predict a digit.   The effectiveness for an explainable property transformation, $i$, to select a particular digit, $d$,  is given by:
 \begin{equation}\label{effectiveness}
-E_{i,x}  = \frac{|A|}{|B|}
+E_{i,d}  = \frac{|A|}{|B|}
 \end{equation}
-where $A$ is the set of correct classifications of explainable property transformation $i$ of the digit $x$ and $B$ is the set of elements of digit $x$.  The weight of the effectiveness for each digit, $x$, is:
+where $A$ is the set of correct classifications of explainable property transformation $i$ of the digit $d$ and $B$ is the set of elements of digit $d$.  The weight of the effectiveness for each digit, $d$, is:
 \begin{equation}\label{weight}
-W_x=\sum_i E_{i, x}
+W_d=\sum_i E_{i, d}
 \end{equation}
-The confidence for the digit $x$ is calculated by the VME and is given by:
+The confidence for the digit $d$ is calculated by the VME and is given by:
 \begin{equation}\label{conf}
-C_x=\frac{W_x}{\sum\limits_jW_j}
+C_x=\frac{W_d}{\sum\limits_jW_j}
 \end{equation}
 The denominator is the sum of all weights for classes that were selected by a property.  If multiple digits are selected by the properties, the digit with the highest confidence will be chosen by the VME.
 
@@ -208,7 +208,7 @@ When evaluating early results, there was particular difficulty with the circle t
 
 Detailed examples from MNIST follow in this section by first providing aggregate property classification results for the digits five and six and then explainable results from three different input images.
 
-Tables ~\ref{table:digit5out} and ~\ref{table:digit6out} show the property transformation NNA output and statistics for properties for digits five and six.  The tables represent the results from reprocessing all of the training digits labeled five and six.  Columns two through ten of the tables represent the property transformations, $P_i$ from Fig.~\ref{transsample}.  The first row of the tables represents effectiveness, $E_{i,x}$, where $i$ is the property transform and $x$ is the digit.  The second, third and fourth rows represent the standard deviation, kurtosis, and skew of the digit outputs for each property.  The numbered rows in the tables represent the means of the property outputs for each digit.  The last two rows are the false positive and false negative rates.
+Tables ~\ref{table:digit5out} and ~\ref{table:digit6out} show the property transformation NNA output and statistics for properties for digits five and six.  The tables represent the results from reprocessing all of the training digits labeled five and six.  Columns two through ten of the tables represent the property transformations, $P_i$ from Fig.~\ref{transsample}.  The first row of the tables represents effectiveness, $E_{i,d}$, where $i$ is the property transform and $d$ is the digit.  The second, third and fourth rows represent the standard deviation, kurtosis, and skew of the digit outputs for each property.  The numbered rows in the tables represent the means of the property outputs for each digit.  The last two rows are the false positive and false negative rates.
 
 We observe that the Stroke property, $P_0$, performed very well in both digits.  The next highest performing property in both tables was the endpoint property, $P_5$, with 85.4\% and 93.3\% accuracy.  The digit six also had good classification results for the enclosed region properties, $P_7$ and $P_9$.  The digit six also performed better than the five in the properties related to the circle, $P_2$, $P_4$, and $P_5$.  The digit five had among the poorest performance as observed from the relatively low percent correct and high false negative rates.
 
@@ -402,7 +402,7 @@ $X_6$ & 24\% & circle properties \\
 \label{table:exexample1}
 \end{table}
 
-The first example digit, labeled a five, is shown in Fig.~\ref{example1}.  Voting and explainability is detailed in Table ~\ref{table:example1}.  The property votes for this example are shown in the Vote column.  Cells with dashes are properties that did not have a sufficiently strong opinion on a particular digit.  I.e., no digit was above a threshold for that property.   The $E_{i,x}$ columns give the effectiveness of a property $i$ to correctly select class $x$.  The effectiveness values are from the knowledgebase using eq. (\ref{effectiveness}).   The stroke $(P_1)$, endpoint $(P_6)$ and line $(P_8)$ properties suggest the digit is a five with effectiveness $E_{1,5}= 1.000$, $E_{6,5}=0.854$, and $E_{8,5}=0.700$.  Weight of effectiveness for the digit five is $W_5=2.554$, given by eq. (\ref{weight}).  The circle $(P_2)$ and $(P_5)$ properties suggest that the digit is a six with effectiveness $E_{2,6}=0.465$ and $E_{5,6}=0.490$  and a weight of $W_6=0.955$.  Taking the sum of all weights, $\sum\limits_i W_i=3.509$.  Confidence, as given by eq. (\ref{conf}), for the five, is given as $C_5=\frac{2.554}{3.509} = 73\%$.  Alternatively, six was suggested by properties where confidence is $C_6=\frac{0.955}{3.509}=27\%$.  Five wins because $C_6=27\% < 73\%=C_5$.  We also observe that the explainability, $X_x$, columns provide rationale for each of the digits that was selected.  The logic in the XAI block references property information from explainability column $X_5$, corresponding to the winning digit, and assembles rationale indicating that the five was selected because the stroke, endpoint, and line properties are consistent with a five. 
+The first example digit, labeled a five, is shown in Fig.~\ref{example1}.  Voting and explainability is detailed in Table ~\ref{table:example1}.  The property votes for this example are shown in the Vote column.  Empty cells are properties that did not have a sufficiently strong opinion on a particular digit.  I.e., no digit was above a threshold for that property.   The $E_{i,d}$ columns give the effectiveness of a property $i$ to correctly select digit $d$.  The effectiveness values are from the knowledgebase using eq. (\ref{effectiveness}).   The stroke $(P_1)$, endpoint $(P_6)$ and line $(P_8)$ properties suggest the digit is a five with effectiveness $E_{1,5}= 1.000$, $E_{6,5}=0.854$, and $E_{8,5}=0.700$.  Weight of effectiveness for the digit five is $W_5=2.554$, given by eq. (\ref{weight}).  The circle $(P_2)$ and $(P_5)$ properties suggest that the digit is a six with effectiveness $E_{2,6}=0.465$ and $E_{5,6}=0.490$  and a weight of $W_6=0.955$.  Taking the sum of all weights, $\sum\limits_i W_i=3.509$.  Confidence, as given by eq. (\ref{conf}), for the five, is given as $C_5=\frac{2.554}{3.509} = 73\%$.  Alternatively, six was suggested by properties where confidence is $C_6=\frac{0.955}{3.509}=27\%$.  Five wins because $C_6=27\% < 73\%=C_5$.  We also observe that the explainability, $X_x$, columns provide rationale for each of the digits that was selected.  The logic in the XAI block references property information from explainability column $X_5$, corresponding to the winning digit, and assembles rationale indicating that the five was selected because the stroke, endpoint, and line properties are consistent with a five. 
 
  \begin{figure}[htbp]
 \centerline{\includegraphics[width=15mm]{./digit-images/9-9.png}}
