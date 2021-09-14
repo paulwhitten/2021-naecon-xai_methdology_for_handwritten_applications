@@ -224,7 +224,7 @@ Detailed examples from MNIST follow in this section by first providing aggregate
 
 Tables ~\ref{table:digit5out} and ~\ref{table:digit6out} show the property transformation NNA output and statistics for properties for digits five and six.  The tables represent the results from reprocessing all of the training digits labeled five and six.  Columns two through ten of the tables represent the property transformations, $P_j$ from Table~\ref{transsample}.  The first row of the tables represents effectiveness, $E_{j,d}$, where $j$ is the property transform, and $d$ is the digit.  The second, third, and fourth rows represent the standard deviation, kurtosis, and skew of the digit outputs for each property.  The numbered rows in the tables represent the means of the property outputs for each digit.  The last two rows are the false-positive and false-negative rates.
 
-We observe that the Stroke property, $P_0$, performed very well in both digits.  The next highest performing property in both tables was the endpoint property, $P_6$, with 85.4\% and 93.3\% accuracy.  The digit six also had good classification results for the enclosed region properties, $P_7$ and $P_9$.  The digit six also performed better than the five in the properties related to the circle, $P_2$, $P_4$, and $P_5$.  The digit five had among the poorest performance as observed from the relatively low percent correct and high false-negative rates.
+We observe that the Stroke property, $P_0$, performed very well in both digits.  The next highest performing property in both tables was the endpoint property, $P_6$, with 0.85 and 0.93 effectiveness.  The digit six also had good classification results for the enclosed region properties, $P_7$ and $P_9$.  The digit six also performed better than the five in the properties related to the circle, $P_2$, $P_4$, and $P_5$.  The digit five had among the poorest performance as observed from the relatively low percent correct and high false-negative rates.
 
 \begin{table}
 \caption{Digit 5 Outputs}
@@ -293,7 +293,7 @@ skew & 3.16& 2.84& 2.89& 3.13& 3.05& 3.15& 3.15& 3.14& 3.15 \\
 \hline
 3 & 0.00 & 0.10 & 0.05 & 0.07 & 0.08 & 0.00 & 0.03 & 0.05 & 0.03 \\
 \hline
-4 & 0.00 & 0.034 & 0.04 & 0.07 & 0.04 & 0.00 & 0.03 & 0.05 & 0.02 \\
+4 & 0.00 & 0.03 & 0.04 & 0.07 & 0.04 & 0.00 & 0.03 & 0.05 & 0.02 \\
 \hline
 5 & 0.00 & 0.10 & 0.07 & 0.05 & 0.09 & 0.01 & 0.03 & 0.03 & 0.02 \\
 \hline
@@ -375,27 +375,27 @@ Next, we present three interesting MNIST digits and review the property classifi
 \hline
  $P_j$ & Property & Vote & $E_{j,5}$ & $E_{j,6}$ & $X_5$ & $X_6$ \\
 \hline \cline{0-6}
-$P_1$ & Stroke & 5 & 1.000 &  & \checkmark &  \\ 
+$P_1$ & Stroke & 5 & 1.00 &  & \checkmark &  \\ 
 \hline
-$P_2$ & Circle & 6 &  & 0.465 &  & \checkmark \\
+$P_2$ & Circle & 6 &  & 0.47 &  & \checkmark \\
 \hline
 $P_3$ & Crossing &  &  &   &  &  \\
 \hline
 $P_4$ & Circle &  &  &  &  &  \\
 \hline
-$P_5$ & Circle & 6 &  & 0.490 &  & \checkmark \\
+$P_5$ & Circle & 6 &  & 0.49 &  & \checkmark \\
 \hline
-$P_6$ & Endpoint & 5 & 0.854 &  & \checkmark &  \\
+$P_6$ & Endpoint & 5 & 0.85 &  & \checkmark &  \\
 \hline
 $P_7$ & Encl. Reg. &  &  &  &  &  \\
 \hline
-$P_8$ & Line & 5 & 0.700 &  & \checkmark &  \\
+$P_8$ & Line & 5 & 0.70 &  & \checkmark &  \\
 \hline
 $P_9$& Encl. Reg. &  &  &  &  &  \\
 \hline \cline{0-6}
-\multicolumn{3}{|c|}{Weight Totals} & $2.554$ & $0.955$ & \multicolumn{2}{c|}{$\sum W_\gamma=3.509$} \\
+\multicolumn{3}{|c|}{Weight Totals} & $2.55$ & $0.96.$ & \multicolumn{2}{c|}{$\sum W_k=3.51$} \\
 \cline{0-6}
-\multicolumn{3}{|c|}{Confidence} & $73\%$ & $24\%$ & \multicolumn{2}{c}{} \\
+\multicolumn{3}{|c|}{Confidence} & $72.6\%$ & $27.4\%$ & \multicolumn{2}{c}{} \\
 \cline{0-4}
 \end{tabular}
 \label{table:example1}
@@ -408,15 +408,15 @@ $P_9$& Encl. Reg. &  &  &  &  &  \\
 \hline
  $X_d$ & Confidence & Explainable Description \\
 \hline \cline{1-3}
-$X_5$ & 73\% & Confidence is high for interpreting this digit as a five due to the stroke, endpoint, and line properties. \\ 
+$X_5$ & 72.6\% & Confidence is high for interpreting this digit as a five due to the stroke, endpoint, and line properties. \\ 
 \hline
-$X_6$ & 24\% & Confidence is low for interpreting this digit as a six due to circle properties. \\
+$X_6$ & 27.4\% & Confidence is low for interpreting this digit as a six due to circle properties. \\
 \hline
 \end{tabular}
 \label{table:exexample1}
 \end{table}
 
-The first example digit, labeled a five, is shown in Fig.~\ref{example1}.  Voting and explainability is detailed in Table ~\ref{table:example1}.  The property votes for this example are shown in the Vote column.  Empty cells are properties that did not have a sufficiently strong opinion on a particular digit.  I.e., no digit was above a threshold for that property.   The $E_{j,d}$ columns give the effectiveness of a property $j$ to correctly select digit $d$.  The effectiveness values are from the knowledgebase using Eq. (\ref{effectiveness}).   The stroke $(P_1)$, endpoint $(P_6)$ and line $(P_8)$ properties suggest the digit is a five with effectiveness $E_{1,5}= 1.000$, $E_{6,5}=0.854$, and $E_{8,5}=0.700$.  The weight of effectiveness for the digit five is $W_5=2.554$, given by Eq. (\ref{weight}).  The circle $(P_2)$ and $(P_5)$ properties suggest that the digit is a six with effectiveness $E_{2,6}=0.465$ and $E_{5,6}=0.490$  and a weight of $W_6=0.955$.  Taking the sum of all weights, $\sum\limits_i W_i=3.509$.  Confidence, as given by Eq. (\ref{conf}), for the five, is given as $C_5=\frac{2.554}{3.509} = 73\%$.  Alternatively, six was suggested by properties where confidence is $C_6=\frac{0.955}{3.509}=27\%$.  Five wins because $C_6=27\% < 73\%=C_5$.  We also observe that the explainability, $X_d$, columns provide the rationale for each of the digits that was selected.  The logic in the XAI block references property information from explainability columns as well as the confidence from the VME and assembled as shown in Table~ \ref{table:exexample1}.   Rationale defending the decision is presented to the user indicating, confidence is high for interpreting this digit as a five due to the stroke, endpoint, and line properties. 
+The first example digit, labeled a five, is shown in Fig.~\ref{example1}.  Voting and explainability is detailed in Table ~\ref{table:example1}.  The property votes for this example are shown in the Vote column.  Empty cells are properties that did not have a sufficiently strong opinion on a particular digit.  I.e., no digit was above a threshold for that property.   The $E_{j,d}$ columns give the effectiveness of a property $j$ to correctly select digit $d$.  The effectiveness values are from the knowledgebase using Eq. (\ref{effectiveness}).   The stroke $(P_1)$, endpoint $(P_6)$ and line $(P_8)$ properties suggest the digit is a five with effectiveness $E_{1,5}= 1.00$, $E_{6,5}=0.85$, and $E_{8,5}=0.70$.  The weight of effectiveness for the digit five is $W_5=2.55$, given by Eq. (\ref{weight}).  The circle $(P_2)$ and $(P_5)$ properties suggest that the digit is a six with effectiveness $E_{2,6}=0.47$ and $E_{5,6}=0.49$  and a weight of $W_6=0.96$.  Taking the sum of all weights, $\sum\limits_k W_k=3.51$.  Confidence, as given by Eq. (\ref{conf}), for the five, is given as $C_5=\frac{2.55}{3.51} = 72.6\%$.  Alternatively, six was suggested by properties where confidence is $C_6=\frac{0.96}{3.51}=27.4\%$.  Five wins because $C_6=27.4\% < 72.6\%=C_5$.  We also observe that the explainability, $X_d$, columns provide the rationale for each of the digits that was selected.  The logic in the XAI block references property information from explainability columns as well as the confidence from the VME and assembled as shown in Table~ \ref{table:exexample1}.   Rationale defending the decision is presented to the user indicating, confidence is high for interpreting this digit as a five due to the stroke, endpoint, and line properties. 
 
  \begin{figure}[htbp]
 \centerline{\includegraphics[width=15mm]{./digit-images/9-9.png}}
@@ -453,7 +453,7 @@ The first example digit, labeled a five, is shown in Fig.~\ref{example1}.  Votin
 %\label{table:example2}
 %\end{table}
 
-The second example,  labeled a nine, is shown in Fig.~\ref{example2}.  Table ~\ref{table:example2} shows the property predictions, voting results, and explainability.  In this example three properties selected the digit nine and three other properties selected the digits three, five, and six.  The results from the VME for this example were that nine was selected with a $67\%$ confidence and an explanation from Table~\ref{table:exexample2} explain that confidence is high for interpreting this digit as a nine due to the stroke and enclosed region properties.  We noted on this example that it is surprising that none of the properties indicated an eight because of the example's similarity to a digit eight.  
+The second example,  labeled a nine, is shown in Fig.~\ref{example2}.  Table ~\ref{table:example2} shows the property predictions, voting results, and explainability.  In this example three properties selected the digit nine and three other properties selected the digits three, five, and six.  The results from the VME for this example were that nine was selected with a $66.5\%$ confidence and an explanation from Table~\ref{table:exexample2} explain that confidence is high for interpreting this digit as a nine due to the stroke and enclosed region properties.  We noted on this example that it is surprising that none of the properties indicated an eight because of the example's similarity to a digit eight.  
 
 \begin{table}[htbp]
 \caption{Probabilistic voting, effectiveness, and explainability for Example 2}
@@ -467,25 +467,25 @@ The second example,  labeled a nine, is shown in Fig.~\ref{example2}.  Table ~\r
 \hline \cline{0-10}
 $P_1$ & Stoke & 9 &  &  &  & 1.00 &  &  &  & \checkmark \\ 
 \hline
-$P_2$ & Circle & 3 & 0.327 &  &  &  & \checkmark &  &  &  \\
+$P_2$ & Circle & 3 & 0.33 &  &  &  & \checkmark &  &  &  \\
 \hline
-$P_3$ & Crossing & 5 &  &  0.057 &  &  &  & \checkmark &  &  \\
+$P_3$ & Crossing & 5 &  &  0.06 &  &  &  & \checkmark &  &  \\
 \hline
 $P_4$ & Circle &  &  &  &  &  &  &  &  &  \\
 \hline
 $P_5$ & Circle &  &  &  &  &  &  &  &  &  \\
 \hline
-$P_6$ & Endpoint & 6 &  &  & 0.933 &  &  &  & \checkmark &  \\
+$P_6$ & Endpoint & 6 &  &  & 0.93 &  &  &  & \checkmark &  \\
 \hline
-$P_7$ & Encl. Reg. & 9 &  &  &  & 0.809 &  &  &  & \checkmark \\
+$P_7$ & Encl. Reg. & 9 &  &  &  & 0.81 &  &  &  & \checkmark \\
 \hline
 $P_8$ & Line &  &  &  &  &  &  &  &  &  \\
 \hline
-$P_9$ & Encl. Reg. & 9 &  &  &  & 0.821 &  &  &  & \checkmark \\
+$P_9$ & Encl. Reg. & 9 &  &  &  & 0.82 &  &  &  & \checkmark \\
 \hline \cline{0-10}
-\multicolumn{3}{|c|}{Weight} & 0.327 & 0.057 & 0.933 & 2.630 & \multicolumn{4}{c|}{$\sum W_\gamma=3.946$} \\
+\multicolumn{3}{|c|}{Weight} & 0.33 & 0.06 & 0.93 & 2.63 & \multicolumn{4}{c|}{$\sum W_k=3.95$} \\
 \cline{0-10}
-\multicolumn{3}{|c|}{Confidence} & $8\%$ & $1\%$ & $24\%$ & $67\%$ & \multicolumn{4}{c}{} \\
+\multicolumn{3}{|c|}{Confidence} & $8.3\%$ & $1.7\%$ & $23.5\%$ & $66.5\%$ & \multicolumn{4}{c}{} \\
 \cline{0-6}
 \end{tabular}%
 }
@@ -499,13 +499,13 @@ $P_9$ & Encl. Reg. & 9 &  &  &  & 0.821 &  &  &  & \checkmark \\
 \hline
  $X_d$ & Confidence & Explainable Description \\
 \hline \cline{1-3}
-$X_9$ & 67\% & Confidence is high for interpreting this digit as a nine due to the stroke and enclosed region properties. \\
+$X_9$ & 66.5\% & Confidence is high for interpreting this digit as a nine due to the stroke and enclosed region properties. \\
 \hline
-$X_6$ & 24\% & Confidence is low for interpreting this digit as a six due to the endpoint property.  \\
+$X_6$ & 23.5\% & Confidence is low for interpreting this digit as a six due to the endpoint property.  \\
 \hline
-$X_3$ & 8\% & Confidence is low for interpreting this digit as a three due to the circle circle property.  \\ 
+$X_3$ & 8.3\% & Confidence is low for interpreting this digit as a three due to the circle circle property.  \\ 
 \hline
-$X_5$ & 1\% & Confidence is almost zero for interpreting this digit as a five due to the crossing property. \\
+$X_5$ & 1.7\% & Confidence is almost zero for interpreting this digit as a five due to the crossing property. \\
 \hline
 \end{tabular}
 \label{table:exexample2}
@@ -555,27 +555,27 @@ $X_5$ & 1\% & Confidence is almost zero for interpreting this digit as a five du
 \hline
  $P_j$ & Property & Vote & $E_{j,2}$ & $E_{j,3}$ & $X_2$ & $X_3$ \\
 \hline \cline{0-6}
-$P_1$ & Stroke & 2 & 1.000 &  & \checkmark &  \\ 
+$P_1$ & Stroke & 2 & 1.00 &  & \checkmark &  \\ 
 \hline
-$P_2$ & Circle & 3 &  & 0.327 &  & \checkmark \\
+$P_2$ & Circle & 3 &  & 0.33 &  & \checkmark \\
 \hline
 $P_3$ & Crossing &  &  &   &  &  \\
 \hline
-$P_4$ & Circle & 2 & 0.161 &  & \checkmark &  \\
+$P_4$ & Circle & 2 & 0.16 &  & \checkmark &  \\
 \hline
-$P_5$ & Circle & 3 &  & 0.387 &  & \checkmark \\
+$P_5$ & Circle & 3 &  & 0.39 &  & \checkmark \\
 \hline
-$P_6$ & Endpoint & 2 & 0.938 &  & \checkmark &  \\
+$P_6$ & Endpoint & 2 & 0.94 &  & \checkmark &  \\
 \hline
 $P_7$ & Encl. Reg. &  &  &  &  &  \\
 \hline
-$P_8$ & Line & 2 & 0.639 &  & \checkmark &  \\
+$P_8$ & Line & 2 & 0.64 &  & \checkmark &  \\
 \hline
 $P_9$ & Encl. Reg. &  &  &  &  &  \\
 \hline \cline{0-6}
-\multicolumn{3}{|c|}{Weight Totals} & $2.738$ & $0.714$ & \multicolumn{2}{c|}{$\sum W_\gamma=3.452$} \\
+\multicolumn{3}{|c|}{Weight Totals} & $2.74$ & $0.72$ & \multicolumn{2}{c|}{$\sum W_k=3.46$} \\
 \cline{0-6}
-\multicolumn{3}{|c|}{Confidence} & $79\%$ & $21\%$ & \multicolumn{2}{c}{} \\
+\multicolumn{3}{|c|}{Confidence} & $79.2\%$ & $20.8\%$ & \multicolumn{2}{c}{} \\
 \cline{0-4}
 \end{tabular}
 \label{table:example3}
@@ -588,15 +588,15 @@ $P_9$ & Encl. Reg. &  &  &  &  &  \\
 \hline
  $X_d$ & Confidence & Explainable Description \\
 \hline \cline{1-3}
-$X_2$ & 79\% & Confidence is high for interpreting this digit as a two due to stroke, circle, endpoint, and line properties. \\ 
+$X_2$ & 79.2\% & Confidence is high for interpreting this digit as a two due to stroke, circle, endpoint, and line properties. \\ 
 \hline
-$X_3$ & 21\% & Confidence is low for interpreting this digit as a three due to circle properties. \\
+$X_3$ & 20.8\% & Confidence is low for interpreting this digit as a three due to circle properties. \\
 \hline
 \end{tabular}
 \label{table:exexample3}
 \end{table}
 
-The third example handwritten digit, labeled a two, is shown in Fig. ~\ref{example3} and Table ~\ref{table:example3}.  In this case,  the VME selects the digit two with a $79\%$ confidence.  Table~\ref{table:exexample3} explains confidence is high for interpreting this digit as a two due to stroke, circle, endpoint, and line properties.  We noted in this example that classification results from circle properties had conflicting votes.  $P_2$ and $P5$ voted for three while $P_4$ voted for two.
+The third example handwritten digit, labeled a two, is shown in Fig. ~\ref{example3} and Table ~\ref{table:example3}.  In this case,  the VME selects the digit two with a $79.2\%$ confidence.  Table~\ref{table:exexample3} explains confidence is high for interpreting this digit as a two due to stroke, circle, endpoint, and line properties.  We noted in this example that classification results from circle properties had conflicting votes.  $P_2$ and $P5$ voted for three while $P_4$ voted for two.
 
 \begin{table}[htbp]
 \caption{NN VME results for examples 1-3}
