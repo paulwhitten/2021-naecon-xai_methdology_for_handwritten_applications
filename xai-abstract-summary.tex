@@ -8,6 +8,7 @@
 \usepackage{textcomp}
 \usepackage{xcolor}
 \usepackage{array}
+%\usepackage{adjustbox}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
@@ -222,14 +223,16 @@ When evaluating early results, there was particular difficulty with the circle t
 
 Detailed examples from MNIST follow in this section by first providing aggregate property classification results for the digits five and six and then explainable results from three different input images.
 
-Tables ~\ref{table:digit5out} and ~\ref{table:digit6out} show the property transformation NNA output and statistics for properties for digits five and six.  The tables represent the results from reprocessing all of the training digits labeled five and six.  Columns two through ten of the tables represent the property transformations, $P_j$ from Table~\ref{transsample}.  The first row of the tables represents effectiveness, $E_{j,d}$, where $j$ is the property transform, and $d$ is the digit.  The second, third, and fourth rows represent the standard deviation, kurtosis, and skew of the digit outputs for each property.  The numbered rows in the tables represent the means of the property outputs for each digit.  The last two rows are the false-positive and false-negative rates.
+Tables ~\ref{table:digit5out} and ~\ref{table:digit6out} show the property transformation NNA output and statistics for properties for digits five and six.  The tables represent the results stored in the knowledgebase from reprocessing all of the training digits labeled five and six.  Columns two through ten of the tables represent the property transformations, $P_j$ from Table~\ref{transsample}.  The first row of the tables represents effectiveness, $E_{j,d}$, where $j$ is the property transform, and $d$ is the digit.  An example of effectiveness can be observed for $E_{5,2}=0.14$ in row 1 column 2 of Table \ref{table:digit5out}. where $P_2$, Hough Circle, only got $\frac{772}{5421}=0.14$ fives correct in reprocessing the training set.   The second, third, and fourth rows represent the standard deviation, kurtosis, and skew of the digit outputs for each property.  The numbered rows in the tables represent the means of the property outputs for each digit.  The last two rows are the false-positive and false-negative rates.
 
 We observe that the Stroke property, $P_0$, performed very well in both digits.  The next highest performing property in both tables was the endpoint property, $P_6$, with 0.85 and 0.93 effectiveness.  The digit six also had good classification results for the enclosed region properties, $P_7$ and $P_9$.  The digit six also performed better than the five in the properties related to the circle, $P_2$, $P_4$, and $P_5$.  The digit five had among the poorest performance as observed from the relatively low percent correct and high false-negative rates.
 
 \begin{table}
+\begin{minipage}{0.48\textwidth}
 \caption{Digit 5 Outputs}
-\centering
+%\centering
 \resizebox{\columnwidth}{!}{%
+%\begin{adjustbox}{width=\columnwidth,center}
 \begin{tabular}{ | c ||  c | c | c | c | c | c | c | c | c |}
 Digit 5 & $P_1$ & $P_2$ & $P_3$ & $P_4$ & $P_5$ & $P_6$ & $P_7$ & $P_8$ & $P_9$ \\
 \hline \hline
@@ -266,14 +269,18 @@ false pos. \%  & 0.0 & 0.5 & 0.2 & 0.4 & 0.7 & 0.4 & 0.0 & 0.3 & 0.0 \\
 false neg. \%  & 0.0 & 84.8 & 94.1 & 78.8 & 78.3 & 13.4 & 96.2 & 29.2 & 94.5 \\
 \hline
 \end{tabular}%
+%\end{adjustbox}
 }
 \label{table:digit5out}
-\end{table}
+%\end{table}
+\end{minipage}
 
-\begin{table}
+%\begin{table}
+\begin{minipage}{0.48\textwidth}
 \caption{Digit 6 Outputs}
-\centering
+%\centering
 \resizebox{\columnwidth}{!}{%
+%\begin{adjustbox}{width=\columnwidth,center}
 \begin{tabular}{ | c ||  c | c | c | c | c | c | c | c | c |}
 Digit 6 & $P_1$ & $P_2$ & $P_3$ & $P_4$ & $P_5$ & $P_6$ & $P_7$ & $P_8$ & $P_9$ \\
 \hline \hline
@@ -281,7 +288,7 @@ $E_{i,6}$  & 1.00 & 0.47 & 0.50 & 0.32 & 0.49 & 0.93 & 0.82 & 0.71 & 0.83 \\
 \hline
 $\sigma$ & 0.30& 0.11& 0.13& 0.09& 0.13& 0.26& 0.24& 0.21& 0.25 \\
 \hline
-k & 10.0& 8.51& 8.62& 9.86& 9.47& 9.96& 9.94& 9.89& 9.93 \\
+k & 10.0& 8.51& +8.62& 9.86& 9.47& 9.96& +9.94& 9.89& +9.93 \\
 \hline
 skew & 3.16& 2.84& 2.89& 3.13& 3.05& 3.15& 3.15& 3.14& 3.15 \\
 \hline
@@ -310,20 +317,22 @@ false pos. \%  & 0.0 & 2.6 & 2.5 & 0.5 & 2.2 & 0.7 & 0.2 & 0.6 & 0.0 \\
 false neg. \%  & 0.0 & 53.3 & 50.1 & 67.5 & 50.7 & 6.6 & 18.1 & 28.1 & 16.8 \\
 \hline
 \end{tabular}%
+%\end{adjustbox}
 }
 \label{table:digit6out}
+\end{minipage}
 \end{table}
 
 Mean digit values from the Property NNAs are also represented  in Fig.~\ref{digit5votes} and ~\ref{digit6votes} as three dimensional surface plots for digits five and  and six.
 
 \begin{figure}[htbp]
 \begin{minipage}{0.48\textwidth}
-\centerline{\includegraphics[width=60mm]{./images/digit-5.png}}
+\centerline{\includegraphics[width=65mm]{./images/digit-5.png}}
 \caption{Property output for digit 5}
 \label{digit5votes}
 \end{minipage}
 \begin{minipage}{0.48\textwidth}
-\centerline{\includegraphics[width=60mm]{./images/digit-6.png}}
+\centerline{\includegraphics[width=65mm]{./images/digit-6.png}}
 \caption{Property output for digit 6}
 \label{digit6votes}
 \end{minipage}
