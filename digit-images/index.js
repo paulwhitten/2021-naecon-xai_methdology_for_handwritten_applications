@@ -1,6 +1,10 @@
 const { Image } = require('image-js');
 const fs = require('fs')
 
+/**
+ * This program inverts the *.png images in this folder
+ */
+
 function test() {
     fs.readdir('./', (err, files) => {
         if (err) {
