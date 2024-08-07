@@ -291,7 +291,7 @@ $E_{i,6}$  & 1.00 & 0.47 & 0.50 & 0.32 & 0.49 & \textbf{0.93} & 0.82 & 0.71 & 0.
 \hline
 $\sigma$ & 0.30& 0.11& 0.13& 0.09& 0.13& 0.26& 0.24& 0.21& 0.25 \\
 \hline
-k & 10.0& 8.51& +8.62& 9.86& 9.47& 9.96& +9.94& 9.89& +9.93 \\
+k & 10.0& 8.51& 8.62& 9.86& 9.47& 9.96& 9.94& 9.89& 9.93 \\
 \hline
 skew & 3.16& 2.84& 2.89& 3.13& 3.05& 3.15& 3.15& 3.14& 3.15 \\
 \hline
@@ -402,7 +402,7 @@ Next, three interesting MNIST digits are presented and the property classificati
 \centering
 \begin{tabular}{| c | c | c | c | c | p{0.08\linewidth} | p{0.08\linewidth} |}
 \cline{4-7}
-\multicolumn{3}{c}{} & \multicolumn{2}{|c|}{Effectiveness} & \multicolumn{2}{c|}{Explainability} \\
+\multicolumn{3}{c|}{} & \multicolumn{2}{c|}{Effectiveness} & \multicolumn{2}{c|}{Explainability} \\
 \hline
  $P_j$ & Property & Vote & $E_{j,5}$ & $E_{j,6}$ & $X_5$ & $X_6$ \\
 \hline \cline{0-6}
@@ -436,7 +436,7 @@ $P_9$& Encl. Reg. &  &  &  &  &  \\
 \renewcommand{\arraystretch}{1.3}
 \caption{Rationale for example 1}
 \centering
-\begin{tabular}{| p{0.04\linewidth} | p{0.14\linewidth} | p{0.65\linewidth} |}
+\begin{tabular}{| m{0.04\linewidth} | m{0.14\linewidth} | m{0.65\linewidth} |}
 \hline
  $X_d$ & Confidence & Explainable Description \\
 \hline \cline{1-3}
@@ -494,7 +494,7 @@ The second example,  labeled a nine, is shown in Fig.~\ref{example2}.  Table ~\r
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c |}
 \cline{4-11}
-\multicolumn{3}{c}{} & \multicolumn{4}{|c|}{Effectiveness} & \multicolumn{4}{c|}{Explainability} \\
+\multicolumn{3}{c|}{} & \multicolumn{4}{c|}{Effectiveness} & \multicolumn{4}{c|}{Explainability} \\
 \hline
  $P_j$ & Property & Vote & $E_{j,3}$ & $E_{j,5}$ & $E_{j,6}$ & $E_{j,9}$ & $X_3$ & $X_5$ & $X_6$ & $X_9$ \\
 \hline \cline{0-10}
@@ -529,7 +529,7 @@ $P_9$ & Encl. Reg. & 9 &  &  &  & 0.82 &  &  &  & \checkmark \\
 \renewcommand{\arraystretch}{1.3}
 \caption{Rationale for example 2}
 \centering
-\begin{tabular}{| p{0.04\linewidth} | p{0.14\linewidth} | p{0.65\linewidth} |}
+\begin{tabular}{| m{0.04\linewidth} | m{0.14\linewidth} | m{0.65\linewidth} |}
 \hline
  $X_d$ & Confidence & Explainable Description \\
 \hline \cline{1-3}
@@ -586,7 +586,7 @@ $X_5$ & 1.5\% & Confidence is almost zero for interpreting this digit as a five 
 \centering
 \begin{tabular}{| c | c | c | c | c | p{0.08\linewidth} | p{0.08\linewidth} |}
 \cline{4-7}
-\multicolumn{3}{c}{} & \multicolumn{2}{|c|}{Effectiveness} & \multicolumn{2}{c|}{Explainability} \\
+\multicolumn{3}{c|}{} & \multicolumn{2}{c|}{Effectiveness} & \multicolumn{2}{c|}{Explainability} \\
 \hline
  $P_j$ & Property & Vote & $E_{j,2}$ & $E_{j,3}$ & $X_2$ & $X_3$ \\
 \hline \cline{0-6}
@@ -620,7 +620,7 @@ $P_9$ & Encl. Reg. &  &  &  &  &  \\
 \renewcommand{\arraystretch}{1.3}
 \caption{Rationale for ex. 3}
 \centering
-\begin{tabular}{| p{0.04\linewidth} | p{0.14\linewidth} | p{0.65\linewidth} |}
+\begin{tabular}{| m{0.04\linewidth} | m{0.14\linewidth} | m{0.65\linewidth} |}
 \hline
  $X_d$ & Confidence & Explainable Description \\
 \hline \cline{1-3}
